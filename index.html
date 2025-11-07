@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ASV • Acceso con Token (BNB Mainnet)</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <h1>🔐 ASV • Portal Token‑Gated</h1>
+      <p class="sub">Red: <strong>BNB Smart Chain (Mainnet)</strong> • Token: <span id="tokenAddr"></span></p>
+    </header>
+
+    <section id="connectPanel" class="card">
+      <h2>1) Conecta tu wallet</h2>
+      <p>Funciona en el navegador de <strong>MetaMask</strong> o <strong>Trust Wallet</strong> (iOS/Android). Si estás en Safari móvil, abre este sitio dentro del navegador de tu wallet.</p>
+      <div class="actions">
+        <button id="btnConnect">Conectar Wallet</button>
+        <button id="btnAddBnb">Agregar BNB Mainnet</button>
+      </div>
+      <div id="connInfo" class="muted"></div>
+    </section>
+
+    <section id="verifyPanel" class="card hidden">
+      <h2>2) Verificar balance del token</h2>
+      <p>Se requiere al menos <strong id="reqAmount"></strong> <span id="sym">ASV‑A</span> para entrar.</p>
+      <div class="actions">
+        <button id="btnCheck">Verificar</button>
+      </div>
+      <div id="checkResult" class="muted"></div>
+    </section>
+
+    <section id="gatedContent" class="card hidden success">
+      <h2>✅ Acceso concedido</h2>
+      <p>Bienvenido. Este es el contenido protegido por el token <span id="sym2">ASV‑A</span>.</p>
+
+      <ul>
+        <li>Panel de utilidades (demo): descarga, API key temporal, y enlace a “zona pro”.</li>
+        <li>Acceso a endpoints exclusivos (placeholders): <code>/api/ai/v1/chat</code></li>
+        <li>Descuentos en fees / cupones tokenizados (próximos pasos).</li>
+      </ul>
+
+      <div class="actions">
+        <a href="protected/demo.txt" download>⬇️ Descargar demo.txt</a>
+      </div>
+    </section>
+
+    <footer class="muted foot">
+      <p>Contrato: <a id="bscscanLink" target="_blank" rel="noreferrer noopener"></a></p>
+    </footer>
+  </main>
+</body>
+</html>
