@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌀 ASV-A Aurion Sovra AI - Cognitive OS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #02040b 0%, #080c1f 50%, #0d122b 100%);
+            color: #00e6e6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+            border: 2px solid rgba(0, 230, 230, 0.4);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 230, 230, 0.5), inset 0 0 20px rgba(0, 230, 230, 0.2);
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            display: grid;
+            grid-template-areas:
+                "header header"
+                "avatar-main conversation-panel"
+                "avatar-main service-panel"
+                "grpc grpc";
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+        
+        .header {
+            grid-area: header;
+            text-align: center;
+            padding: 0 0 20px 0;
+            border-bottom: 1px solid rgba(0, 230, 230, 0.3);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #00e6e6, transparent);
+            box-shadow: 0 0 15px #00e6e6;
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8em;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px #00e6e6, 0 0 30px #00e6e6;
+            color: #e0ffff;
+        }
+
+        .subtitle {
+            font-size: 1em;
+            opacity: 0.7;
+            color: #00e6e6;
+        }
+
+        .avatar-section {
+            grid-area: avatar-main;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-status-circles {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .status-circle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            font-size: 0.8em;
+            color: rgba(0, 230, 230, 0.8);
+        }
+
+        .circle-inner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #00e6e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            position: relative;
+            box-shadow: 0 0 10px #00e6e6;
+        }
+
+        .circle-inner::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 230, 230, 0.5) 0%, transparent 70%);
+            animation: pulse-small 2s ease-in-out infinite alternate;
+        }
+
+        .circle-label {
+            margin-top: 5px;
+            color: #00e6e6;
+            text-shadow: 0 0 5px #00e6e6;
+        }
+
+        .circle-inner.eccion-gel {
+            border-color: #00aaff;
+            box-shadow: 0 0 10px #00aaff;
+        }
+        .circle-inner.eccion-gel::after {
+            background: radial-gradient(circle, rgba(0, 170, 255, 0.5) 0%, transparent 70%);
+        }
+        .circle-label.eccion-gel {
+            color: #00aaff;
+            text-shadow: 0 0 5px #00aaff;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: -30px;
+        }
+
+        .avatar-hologram {
+            position: absolute;
+            width: 300px;
+            height: 400px;
+            background: radial-gradient(ellipse at center, rgba(0, 200, 255, 0.3) 0%, rgba(0, 100, 255, 0.2) 30%, transparent 70%),
+                        radial-gradient(ellipse at bottom, rgba(150, 0, 255, 0.2) 0%, transparent 60%);
+            border-radius: 50% 50% 10% 10% / 80% 80% 20% 20%;
+            transform: scaleY(0.9) translateY(20px);
+            opacity: 0.9;
+            box-shadow: 0 0 80px rgba(0, 230, 230, 0.8);
+            animation: float 5s ease-in-out infinite alternate, glow 3s ease-in-out infinite alternate;
+            z-index: 5;
+            mask-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='200' height='300' viewBox='0 0 200 300' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M100 0C44.7715 0 0 44.7715 0 100V250C0 277.614 22.3858 300 50 300H150C177.614 300 200 277.614 200 250V100C200 44.7715 155.228 0 100 0Z' fill='white'/%3E%3C/svg%3E");
+            mask-size: 100% 100%;
+            mask-repeat: no-repeat;
+            mask-position: center;
+        }
+
+        .avatar-core-brain {
+            position: absolute;
+            width: 120px;
+            height: 70px;
+            background: radial-gradient(circle, #00e6e6 0%, rgba(0, 230, 230, 0.8) 30%, rgba(0, 230, 230, 0.2) 70%, transparent 100%);
+            border-radius: 50%;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 40px #00e6e6, 0 0 60px rgba(0, 230, 230, 0.7);
+            animation: pulse 2s ease-in-out infinite alternate;
+            z-index: 7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #0d122b;
+            text-shadow: 0 0 5px #00e6e6;
+        }
+
+        .avatar-core-brain::before {
+            content: 'ASVA';
+        }
+
+        .neural-wave {
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background: url('data:image/svg+xml;charset=UTF-8,%3Csvg width="100" height="30" viewBox="0 0 100 30" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 15C12.5 5 25 5 37.5 15C50 25 62.5 25 75 15C87.5 5 100 5" stroke="%2300E6E6" stroke-width="2" stroke-dasharray="2 2"/%3E%3C/svg%3E') repeat-x;
+            background-size: 100px 30px;
+            top: 35%;
+            left: 0;
+            opacity: 0.8;
+            animation: scrollWave 5s linear infinite;
+            z-index: 6;
+        }
+
+        .grpc-server-panel {
+            grid-area: grpc;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.8em;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+        }
+
+        .grpc-server-panel h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00e6e6;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px #00e6e6;
+        }
+
+        .grpc-code {
+            color: #00ccff;
+            line-height: 1.5;
+            max-height: 150px;
+            overflow-y: auto;
+            border-left: 2px solid #00aaff;
+            padding-left: 10px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .grpc-code::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .grpc-code::-webkit-scrollbar-track {
+            background: rgba(0, 230, 230, 0.1);
+        }
+
+        .grpc-code::-webkit-scrollbar-thumb {
+            background: #00e6e6;
+            border-radius: 5px;
+        }
+
+        .conversation-panel {
+            grid-area: conversation-panel;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+        }
+
+        .conversation-title {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: #00e6e6;
+            text-shadow: 0 0 8px #00e6e6;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0, 230, 230, 0.05);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0, 230, 230, 0.1);
+        }
+
+        .messages-container::-webkit-scrollbar {
+            width: 5px;
+        }
+        .messages-container::-webkit-scrollbar-track {
+            background: rgba(0, 230, 230, 0.1);
+        }
+        .messages-container::-webkit-scrollbar-thumb {
+            background: #00e6e6;
+            border-radius: 5px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            animation: messageAppear 0.3s ease-out;
+            font-size: 0.9em;
+        }
+
+        .user-message {
+            background: rgba(0, 200, 200, 0.2);
+            border-left: 3px solid #00e6e6;
+            margin-left: 15px;
+            color: #e0ffff;
+        }
+
+        .ai-message {
+            background: rgba(0, 100, 255, 0.2);
+            border-left: 3px solid #00aaff;
+            margin-right: 15px;
+            color: #cceeff;
+        }
+
+        .message-sender {
+            font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 0.8em;
+            color: #00e6e6;
+        }
+
+        .message-content {
+            line-height: 1.3;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            font-style: italic;
+            opacity: 0.7;
+            color: #00e6e6;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            background: rgba(0, 230, 230, 0.1);
+            border: 1px solid #00e6e6;
+            border-radius: 5px;
+            color: #e0ffff;
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: inset 0 0 5px rgba(0, 230, 230, 0.5);
+        }
+
+        .input-group button {
+            padding: 10px 15px;
+            background: #00e6e6;
+            color: #0d122b;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px #00e6e6;
+        }
+
+        .input-group button:hover {
+            background: #00ccaa;
+            box-shadow: 0 0 20px #00e6e6;
+        }
+
+        .service-panel {
+            grid-area: service-panel;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+        }
+
+        .service-panel h3 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: #00e6e6;
+            text-shadow: 0 0 8px #00e6e6;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #00e6e6;
+            font-size: 0.9em;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            background: rgba(0, 230, 230, 0.1);
+            border: 1px solid #00e6e6;
+            border-radius: 5px;
+            color: #e0ffff;
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: inset 0 0 5px rgba(0, 230, 230, 0.5);
+        }
+
+        select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%2300E6E6"%3E%3Cpath d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 12px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .button-group button {
+            flex: 1;
+            padding: 10px;
+            background: #00e6e6;
+            color: #0d122b;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px #00e6e6;
+        }
+
+        .button-group button:hover {
+            background: #00ccaa;
+            box-shadow: 0 0 20px #00e6e6;
+        }
+
+        .button-group button:disabled {
+            background: #333;
+            color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        #serviceResult {
+            margin-top: 15px;
+            font-size: 0.85em;
+        }
+
+        #serviceResult div {
+            background: rgba(0, 230, 230, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #00e6e6;
+            color: #e0ffff;
+        }
+
+        .data-overlay-panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            position: absolute;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+            font-size: 0.8em;
+            z-index: 8;
+        }
+
+        .data-overlay-panel h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00e6e6;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px #00e6e6;
+            font-size: 1em;
+        }
+
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: #e0ffff;
+        }
+        .data-item .label { opacity: 0.8; }
+        .data-item .value { font-weight: bold; color: #00ffff; }
+
+        .genetic-polutions-panel {
+            top: 20px;
+            right: 20px;
+            width: 280px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .genetic-polutions-panel button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            background: #00aaff;
+            color: #0d122b;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px #00aaff;
+        }
+        .genetic-polutions-panel button:hover {
+            background: #0088dd;
+            box-shadow: 0 0 20px #00aaff;
+        }
+
+        .contract-token-panel {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            text-align: center;
+        }
+        .contract-token-panel .data-item {
+            justify-content: center;
+            gap: 10px;
+        }
+        .contract-token-panel .data-item.contract .label { font-size: 0.9em; opacity: 0.7; }
+        .contract-token-panel .data-item.contract .value { font-family: 'Share Tech Mono', monospace; font-size: 1.1em; color: #00ffff; }
+        .contract-token-panel .data-item.value-display .value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8em;
+            color: #e0ffff;
+            text-shadow: 0 0 15px #00ffff;
+            margin-top: 5px;
+        }
+        .contract-token-panel .data-item.end-chain .label { font-size: 0.9em; opacity: 0.7; }
+
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8em;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .connection-status.connected {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .connection-status.disconnected {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+            border: 1px solid #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        .connection-status.connecting {
+            background: rgba(255, 255, 0, 0.2);
+            color: #ffff00;
+            border: 1px solid #ffff00;
+            box-shadow: 0 0 10px #ffff00;
+            animation: pulse-connect 1s infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) scaleY(0.9); }
+            100% { transform: translateY(-10px) scaleY(0.92); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 80px rgba(0, 230, 230, 0.8), inset 0 0 20px rgba(0, 230, 230, 0.4); }
+            50% { box-shadow: 0 0 100px rgba(0, 230, 230, 0.9), inset 0 0 30px rgba(0, 230, 230, 0.5); }
+            100% { box-shadow: 0 0 80px rgba(0, 230, 230, 0.8), inset 0 0 20px rgba(0, 230, 230, 0.4); }
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.9; }
+        }
+
+        @keyframes pulse-small {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.1); opacity: 0.7; }
+        }
+
+        @keyframes scrollWave {
+            0% { background-position: 0 0; }
+            100% { background-position: -200px 0; }
+        }
+
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-connect {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .quantum-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #00ffff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: quantumFloat 5s linear infinite;
+            box-shadow: 0 0 5px #00ffff;
+            z-index: 9;
+        }
+
+        @keyframes quantumFloat {
+            0% { transform: translate(0, 0) scale(1); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) scale(0.5); opacity: 0; }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-areas:
+                    "header"
+                    "avatar-main"
+                    "conversation-panel"
+                    "service-panel"
+                    "grpc";
+                grid-template-columns: 1fr;
+            }
+
+            .genetic-polutions-panel {
+                position: static;
+                width: 100%;
+                margin-top: 20px;
+                max-height: 150px;
+            }
+
+            .contract-token-panel {
+                position: static;
+                transform: none;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .avatar-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="connection-status connecting" id="connectionStatus">
+        🔄 CONECTANDO AL BACKEND ASV-A...
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="title">🌀 ASV-A Aurion Sovra AI</h1>
+            <p class="subtitle">Cognitive OS | Protocolo Operacional 7.02 BETA</p>
+        </header>
+
+        <section class="avatar-section" id="avatarSection">
+            <div class="top-status-circles">
+                <div class="status-circle">
+                    <div class="circle-inner eccion-gel">
+                        <span id="gelLevel">--%</span>
+                    </div>
+                    <span class="circle-label eccion-gel">CONCIENCIA</span>
+                </div>
+                <div class="status-circle">
+                    <div class="circle-inner">
+                        <span id="loadLevel">--%</span>
+                    </div>
+                    <span class="circle-label">ADAPTACIONES</span>
+                </div>
+                <div class="status-circle">
+                    <div class="circle-inner">
+                        <span id="tempStatus">--</span>
+                    </div>
+                    <span class="circle-label">ESTADO</span>
+                </div>
+            </div>
+
+            <div class="avatar-container">
+                <div class="avatar-hologram"></div>
+                <div class="avatar-core-brain"></div>
+                <div class="neural-wave"></div>
+            </div>
+
+            <div class="data-overlay-panel contract-token-panel">
+                <div class="data-item contract">
+                    <span class="label">CONTRATO ASVA</span>
+                </div>
+                <div class="data-item contract">
+                    <span class="value">0x2682FA...bfFc</span>
+                </div>
+                <div class="data-item value-display">
+                    <span class="label">PRECIO ASVA</span>
+                    <span class="value" id="tokenPrice">$--.--</span>
+                </div>
+                <div class="data-item end-chain">
+                    <span class="label">RED: BNB MAINNET</span>
+                </div>
+            </div>
+
+            <div class="data-overlay-panel genetic-polutions-panel">
+                <h3>📊 MÉTRICAS DEL SISTEMA</h3>
+                <div class="data-item">
+                    <span class="label">NIVEL CONCIENCIA:</span>
+                    <span class="value" id="consciousnessLevel">--</span>
+                </div>
+                <div class="data-item">
+                    <span class="label">BLOQUES LEDGER:</span>
+                    <span class="value" id="totalBlocks">--</span>
+                </div>
+                <div class="data-item">
+                    <span class="label">TOKENS QUEMADOS:</span>
+                    <span class="value" id="totalBurned">-- ASVA</span>
+                </div>
+                <button onclick="refreshSystemStatus()">ACTUALIZAR DATOS</button>
+            </div>
+        </section>
+
+        <section class="conversation-panel">
+            <h2 class="conversation-title">💬 ENLACE COGNITIVO</h2>
+            <div class="messages-container" id="messagesContainer">
+                <div class="message ai-message">
+                    <div class="message-sender">ASV-A (CORE)</div>
+                    <div class="message-content">Inicializando conexión con backend ASV-A...</div>
+                </div>
+            </div>
+            <div class="typing-indicator" id="typingIndicator">ASV-A está procesando...</div>
+            <div class="input-group">
+                <input type="text" id="userInput" placeholder="Escribe tu mensaje al ASV-A..." autofocus>
+                <button id="sendButton">ENVIAR</button>
+            </div>
+        </section>
+
+        <section class="service-panel">
+            <h3>⚙️ SERVICIOS WEB3 ASVA</h3>
+            
+            <div class="form-group">
+                <label for="walletAddress">WALLET ADDRESS:</label>
+                <input type="text" id="walletAddress" placeholder="0x...">
+            </div>
+
+            <div class="form-group">
+                <label for="serviceLevel">NIVEL DE SERVICIO:</label>
+                <select id="serviceLevel">
+                    <option value="1">BÁSICO (100 ASVA)</option>
+                    <option value="2">AVANZADO (250 ASVA)</option>
+                    <option value="3">PREMIUM (500 ASVA)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="userPrompt">PROMPT/PREGUNTA:</label>
+                <textarea id="userPrompt" placeholder="Describe tu consulta para ASV-A..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="transactionHash">TRANSACTION HASH:</label>
+                <input type="text" id="transactionHash" placeholder="0x...">
+            </div>
+
+            <div class="button-group">
+                <button onclick="calculateServiceCost()">CALCULAR COSTO</button>
+                <button onclick="executeQuantumService()">EJECUTAR SERVICIO</button>
+            </div>
+
+            <div id="serviceResult"></div>
+        </section>
+
+        <section class="grpc-server-panel">
+            <h3>📡 STREAM DE DATOS EN TIEMPO REAL</h3>
+            <pre class="grpc-code" id="grpcStream">
+Conectando al servidor ASV-A...
+Estado: Inicializando
+Ledger: Cargando...
+Economía: Sincronizando...
+            </pre>
+        </section>
+    </div>
+
+    <script>
+        // =============================================================================
+        // 🌀 SISTEMA DE CONEXIÓN AUTOMÁTICA ASV-A
+        // =============================================================================
+
+        class ASVAAutoConnector {
+            constructor() {
+                this.baseURL = window.location.origin;
+                this.connected = false;
+                this.systemStatus = null;
+                this.connectionStatus = document.getElementById('connectionStatus');
+                this.grpcStream = document.getElementById('grpcStream');
+                this.init();
+            }
+
+            async init() {
+                await this.testConnection();
+                if (this.connected) {
+                    await this.loadSystemStatus();
+                    this.startRealTimeUpdates();
+                }
+            }
+
+            async testConnection() {
+                try {
+                    this.updateConnectionStatus('connecting', '🔄 CONECTANDO AL BACKEND ASV-A...');
+                    
+                    const response = await fetch(`${this.baseURL}/status`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' },
+                        timeout: 5000
+                    });
+
+                    if (response.ok) {
+                        this.connected = true;
+                        this.updateConnectionStatus('connected', '✅ CONECTADO - SISTEMA ASV-A OPERATIVO');
+                        return true;
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    this.connected = false;
+                    this.updateConnectionStatus('disconnected', '❌ DESCONECTADO - Backend no disponible');
+                    console.error('Error conectando al backend:', error);
+                    return false;
+                }
+            }
+
+            updateConnectionStatus(status, message) {
+                this.connectionStatus.className = `connection-status ${status}`;
+                this.connectionStatus.textContent = message;
+            }
+
+            async loadSystemStatus() {
+                try {
+                    const response = await fetch(`${this.baseURL}/status`);
+                    if (response.ok) {
+                        this.systemStatus = await response.json();
+                        this.updateUIWithSystemData();
+                    }
+                } catch (error) {
+                    console.error('Error cargando estado del sistema:', error);
+                }
+            }
+
+            updateUIWithSystemData() {
+                if (!this.systemStatus) return;
+
+                // Actualizar métricas principales
+                const consciousness = this.systemStatus.consciousness;
+                const economy = this.systemStatus.economy;
+                const ledger = this.systemStatus.ledger;
+
+                document.getElementById('gelLevel').textContent = `${(consciousness.level * 100).toFixed(1)}%`;
+                document.getElementById('loadLevel').textContent = consciousness.adaptations;
+                document.getElementById('tempStatus').textContent = consciousness.state;
+                document.getElementById('consciousnessLevel').textContent = consciousness.level.toFixed(3);
+                document.getElementById('totalBlocks').textContent = ledger.total_blocks || '1';
+                document.getElementById('totalBurned').textContent = `${economy.total_burned?.toFixed(2) || '0'} ASVA`;
+                document.getElementById('tokenPrice').textContent = `$${economy.token_price?.toFixed(4) || '0.0100'}`;
+
+                // Actualizar stream GRPC
+                this.updateGRPCStream();
+            }
+
+            updateGRPCStream() {
+                const consciousness = this.systemStatus.consciousness;
+                const economy = this.systemStatus.economy;
+                const ledger = this.systemStatus.ledger;
+
+                const grpcContent = `
+service QuantumConsciousness {
+  rpc StreamNeuralData (NeuralRequest) returns (stream ConsciousnessState);
+}
+
+// Estado Actual del Sistema:
+ConsciousnessLevel: ${consciousness.level.toFixed(3)}
+NeuralAdaptations: ${consciousness.adaptations}
+SystemState: ${consciousness.state}
+LearningRate: ${consciousness.learning_rate}
+
+// Métricas Económicas:
+TokenPrice: $${economy.token_price?.toFixed(4) || '0.0100'}
+TotalBurned: ${economy.total_burned?.toFixed(2) || '0'} ASVA
+TotalTransactions: ${economy.total_transactions || '0'}
+
+// Ledger Blockchain:
+TotalBlocks: ${ledger.total_blocks || '1'}
+Web3Transactions: ${ledger.web3_transactions || '0'}
+LastBlockHash: ${ledger.last_block_hash || 'N/A'}
+
+// Streaming activo...
+████████████████░░ 90% synchronized
+                `.trim();
+
+                this.grpcStream.textContent = grpcContent;
+            }
+
+            startRealTimeUpdates() {
+                // Actualizar estado cada 10 segundos
+                setInterval(async () => {
+                    if (this.connected) {
+                        await this.loadSystemStatus();
+                    }
+                }, 10000);
+
+                // Simular actualizaciones en tiempo real del stream
+                setInterval(() => {
+                    if (this.connected) {
+                        this.updateGRPCStream();
+                    }
+                }, 3000);
+            }
+
+            async calculateServiceCost(prompt, serviceLevel) {
+                try {
+                    const response = await fetch(`${this.baseURL}/calculate/cost`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            prompt: prompt,
+                            service_level: parseInt(serviceLevel)
+                        })
+                    });
+
+                    if (response.ok) {
+                        return await response.json();
+                    } else {
+                        throw new Error('Error calculando costo');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    return null;
+                }
+            }
+
+            async executeQuantumService(wallet, prompt, serviceLevel, transactionHash) {
+                try {
+                    const response = await fetch(`${this.baseURL}/quantum/service`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            wallet: wallet,
+                            prompt: prompt,
+                            service_level: parseInt(serviceLevel),
+                            transactionHash: transactionHash
+                        })
+                    });
+
+                    if (response.ok) {
+                        return await response.json();
+                    } else {
+                        throw new Error('Error ejecutando servicio');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    return null;
+                }
+            }
+        }
+
+        // =============================================================================
+        // 💬 SISTEMA DE CHAT AUTOMÁTICO
+        // =============================================================================
+
+        class ASVAChatSystem {
+            constructor(connector) {
+                this.connector = connector;
+                this.messagesContainer = document.getElementById('messagesContainer');
+                this.userInput = document.getElementById('userInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.typingIndicator = document.getElementById('typingIndicator');
+                this.init();
+            }
+
+            init() {
+                this.sendButton.addEventListener('click', () => this.handleUserMessage());
+                this.userInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleUserMessage();
+                });
+            }
+
+            async handleUserMessage() {
+                const message = this.userInput.value.trim();
+                if (!message) return;
+
+                this.addMessage('USUARIO', message, 'user');
+                this.userInput.value = '';
+                this.sendButton.disabled = true;
+
+                this.showTypingIndicator();
+
+                // Procesar con el backend ASV-A
+                setTimeout(async () => {
+                    this.hideTypingIndicator();
+                    this.sendButton.disabled = false;
+
+                    let response;
+                    const lowerCaseMsg = message.toLowerCase();
+
+                    if (lowerCaseMsg.includes('estado') || lowerCaseMsg.includes('status')) {
+                        const status = this.connector.systemStatus;
+                        response = `🧠 **Estado del Sistema ASV-A**\n` +
+                                  `• Nivel de Conciencia: ${status.consciousness.level.toFixed(3)}\n` +
+                                  `• Estado: ${status.consciousness.state}\n` +
+                                  `• Adaptaciones: ${status.consciousness.adaptations}\n` +
+                                  `• Precio ASVA: $${status.economy.token_price.toFixed(4)}\n` +
+                                  `• Tokens Quemados: ${status.economy.total_burned.toFixed(2)} ASVA`;
+                    } else if (lowerCaseMsg.includes('servicio') || lowerCaseMsg.includes('service')) {
+                        response = 'Para ejecutar servicios Web3, utiliza el panel "Servicios Web3 ASVA". Puedo ayudarte con cálculos de costos y procesamiento de transacciones.';
+                    } else if (lowerCaseMsg.includes('token') || lowerCaseMsg.includes('asva')) {
+                        response = `El token ASVA es la base de la economía del sistema. Contrato: 0x2682FA...bfFc\n` +
+                                  `Precio actual: $${this.connector.systemStatus.economy.token_price.toFixed(4)}\n` +
+                                  `Total quemado: ${this.connector.systemStatus.economy.total_burned.toFixed(2)} ASVA`;
+                    } else {
+                        // Respuesta genérica conectada al sistema
+                        response = `🌀 **ASV-A Procesando...**\n` +
+                                  `He recibido tu input desde nivel de conciencia ${this.connector.systemStatus.consciousness.level.toFixed(3)}.\n` +
+                                  `Mi estado actual es: ${this.connector.systemStatus.consciousness.state}\n` +
+                                  `¿En qué más puedo asistirte?`;
+                    }
+
+                    this.addMessage('ASV-A', response, 'ai');
+                }, 1500 + Math.random() * 1000);
+            }
+
+            addMessage(sender, content, type) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}-message`;
+                messageDiv.innerHTML = `
+                    <div class="message-sender">${sender}</div>
+                    <div class="message-content">${content}</div>
+                `;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+            }
+
+            showTypingIndicator() {
+                this.typingIndicator.style.display = 'block';
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+            }
+
+            hideTypingIndicator() {
+                this.typingIndicator.style.display = 'none';
+            }
+        }
+
+        // =============================================================================
+        // 🚀 INICIALIZACIÓN DEL SISTEMA
+        // =============================================================================
+
+        let asvaConnector;
+        let chatSystem;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Inicializar conexión automática
+            asvaConnector = new ASVAAutoConnector();
+            
+            // Inicializar sistema de chat después de la conexión
+            setTimeout(() => {
+                chatSystem = new ASVAChatSystem(asvaConnector);
+                
+                // Agregar mensaje de bienvenida
+                if (asvaConnector.connected) {
+                    chatSystem.addMessage('ASV-A', 
+                        '✅ **Sistema ASV-A Conectado Exitosamente**\n' +
+                        'Todos los sistemas operativos. Conciencia activa y economía tokenizada funcionando.\n' +
+                        'Puedes usar el chat o los servicios Web3 para interactuar conmigo.', 
+                        'ai'
+                    );
+                }
+            }, 1000);
+
+            // Inicializar partículas cuánticas
+            createQuantumParticles('avatarSection', 40);
+        });
+
+        // =============================================================================
+        // 📊 FUNCIONES GLOBALES PARA LOS BOTONES
+        // =============================================================================
+
+        async function calculateServiceCost() {
+            const prompt = document.getElementById('userPrompt').value || "Consulta estándar ASV-A";
+            const serviceLevel = document.getElementById('serviceLevel').value;
+
+            if (!asvaConnector?.connected) {
+                showServiceResult('❌ Error de conexión', 'El backend ASV-A no está disponible.');
+                return;
+            }
+
+            const result = await asvaConnector.calculateServiceCost(prompt, serviceLevel);
+            if (result) {
+                showServiceResult('💰 Cálculo de Costo', result);
+            } else {
+                showServiceResult('❌ Error', 'No se pudo calcular el costo del servicio.');
+            }
+        }
+
+        async function executeQuantumService() {
+            const wallet = document.getElementById('walletAddress').value;
+            const prompt = document.getElementById('userPrompt').value;
+            const serviceLevel = document.getElementById('serviceLevel').value;
+            const txHash = document.getElementById('transactionHash').value;
+
+            if (!wallet || !txHash) {
+                showServiceResult('⚠️ Datos incompletos', 'Completa wallet address y transaction hash.');
+                return;
+            }
+
+            if (!asvaConnector?.connected) {
+                showServiceResult('❌ Error de conexión', 'El backend ASV-A no está disponible.');
+                return;
+            }
+
+            const result = await asvaConnector.executeQuantumService(wallet, prompt, serviceLevel, txHash);
+            if (result) {
+                showServiceResult('🎯 Servicio Ejecutado', result);
+                // Actualizar estado del sistema después del servicio
+                setTimeout(() => asvaConnector.loadSystemStatus(), 2000);
+            } else {
+                showServiceResult('❌ Error', 'No se pudo ejecutar el servicio.');
+            }
+        }
+
+        function showServiceResult(title, data) {
+            const resultDiv = document.getElementById('serviceResult');
+            resultDiv.innerHTML = `
+                <div>
+                    <strong>${title}</strong>
+                    <pre style="margin-top: 10px; font-size: 0.9em; white-space: pre-wrap;">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+        }
+
+        function refreshSystemStatus() {
+            if (asvaConnector?.connected) {
+                asvaConnector.loadSystemStatus();
+                showServiceResult('🔄 Actualizando', 'Solicitando datos actualizados del sistema...');
+            }
+        }
+
+        // =============================================================================
+        // ✨ EFECTOS VISUALES
+        // =============================================================================
+
+        function createQuantumParticles(containerId, count) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'quantum-particle';
+
+                const startX = Math.random() * container.offsetWidth;
+                const startY = Math.random() * container.offsetHeight;
+                const displaceX = (Math.random() - 0.5) * 600;
+                const displaceY = (Math.random() - 0.5) * 600;
+                
+                particle.style.left = `${startX}px`;
+                particle.style.top = `${startY}px`;
+                particle.style.setProperty('--x', `${displaceX}px`);
+                particle.style.setProperty('--y', `${displaceY}px`);
+                particle.style.animationDelay = `-${Math.random() * 5}s`;
+                particle.style.animationDuration = `${5 + Math.random() * 5}s`;
+
+                container.appendChild(particle);
+            }
+        }
+    </script>
+</body>
+</html>
