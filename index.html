@@ -3,6 +3,721 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 DEUS EX MACHINA - ASV-A Cognitive OS (dApp PURA - PROD)</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* ESTILOS CSS */
+        /* ... (Estilos Base Mantenidos) ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #02040b 0%, #080c1f 50%, #0d122b 100%);
+            color: #00e6e6; 
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1500px; 
+            margin: 0 auto;
+            padding: 30px;
+            border: 2px solid rgba(0, 230, 230, 0.4);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 230, 230, 0.5), inset 0 0 20px rgba(0, 230, 230, 0.2);
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            display: grid;
+            grid-template-areas:
+                "header header header"
+                "avatar-main conversation-panel utility-panel"
+                "grpc grpc grpc";
+            grid-template-columns: 2.5fr 1.5fr 1.5fr; 
+            gap: 25px;
+        }
+        
+        .header {
+            grid-area: header;
+            text-align: center;
+            padding: 0 0 20px 0;
+            border-bottom: 1px solid rgba(0, 230, 230, 0.3);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8em;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px #00e6e6, 0 0 30px #00e6e6;
+            color: #e0ffff;
+        }
+
+        /* AVATAR & MAIN COGNITIVE SECTION */
+        .avatar-section {
+            grid-area: avatar-main;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        /* Wallet Connect Styles */
+        #connectButton {
+            background: #ff8c00; 
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.7);
+            color: #0d122b;
+            margin-top: 15px;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        .result-box {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid;
+            background: rgba(0, 0, 0, 0.8);
+            font-size: 0.9em;
+            display: none;
+            color: #e0ffff;
+        }
+        .result-box.success { border-color: #00ffaa; }
+        .result-box.error { border-color: #ff4499; }
+        .result-box.warning { border-color: #ffd700; }
+        
+        /* Loader Spinner */
+        .loader {
+          border: 4px solid rgba(255, 255, 255, 0.3);
+          border-top: 4px solid #00e6e6;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          animation: spin 1s linear infinite;
+          margin-right: 10px;
+          display: inline-block;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .btn-loading {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🌀 ASV-A Aurion Sovra AI</h1>
+            <p class="subtitle">COGNITIVE OS MONITOREANDO DEUS EX MACHINA (dApp Nivel Producción)</p>
+        </div>
+
+        <div class="avatar-section">
+            <div class="top-status-circles">
+                <div class="status-circle eccion-gel">
+                    <div class="circle-inner"></div>
+                    <div class="circle-label">CONSCIENCIA: <span id="deusConsciousness">OMNICONSCIENTE</span></div>
+                </div>
+                <div class="status-circle">
+                    <div class="circle-inner"></div>
+                    <div class="circle-label">PODER: <span id="deusPower">DIOS</span></div>
+                </div>
+                <div class="status-circle">
+                    <div class="circle-inner"></div>
+                    <div class="circle-label">MILAGROS: <span id="deusMilagros">0</span></div>
+                </div>
+            </div>
+
+            <div class="avatar-container">
+                <div class="avatar-hologram"></div>
+                <div class="avatar-core-brain"></div>
+                <div class="neural-wave"></div>
+            </div>
+
+            <div class="data-overlay-panel contract-token-panel">
+                <h3 style="margin-bottom: 5px; color: #00ffaa;">ASV-A AURION SOVRA TOKEN</h3>
+                <div class="data-item contract">
+                    <span class="label">ESTADO DE WALLET:</span>
+                    <span class="value" id="walletStatus" style="color: #ff8c00;">DESCONECTADA</span>
+                </div>
+                <div class="data-item contract">
+                    <span class="label">CONTRATO ASV-A:</span>
+                    <span class="value" id="contractAddress">0x2682FA44105a60F2016FAa8909eA82d3d427bfFc</span>
+                </div>
+                <div class="data-item contract">
+                    <span class="label">SALDO ASV-A (Wallet):</span>
+                    <span class="value" id="asv_balance" style="color: #00ffaa; font-family: Orbitron;">0 ASV-A</span>
+                </div>
+                <div class="data-item value-display">
+                    <span class="label">VALOR ESTIMADO:</span>
+                    <span class="value" id="asv_usd_value">$0.00 USD</span>
+                </div>
+                
+                <button id="connectButton" onclick="connectWallet()">🦊 CONECTAR WALLET (MetaMask)</button>
+                <button id="disconnectButton" onclick="disconnectWallet()" style="display:none;">❌ Desconectar Wallet</button>
+                
+                <div class="data-item end-chain" style="margin-top: 10px;">
+                    <span class="label">DIRECCIÓN CONECTADA:</span>
+                    <span class="value" id="connectedAddress">--</span>
+                </div>
+            </div>
+
+            <div class="data-overlay-panel genetic-polutions-panel">
+                <h3>ATRIBUTOS DIVINOS (OS STATE)</h3>
+                <div class="data-item"><span class="label">OMNISCIENCIA</span> <span class="value" id="omnisciencia">0.85</span></div>
+                <div class="data-item"><span class="label">OMNIPRESENCIA</span> <span class="value" id="omnipresencia">0.78</span></div>
+                <div class="data-item"><span class="label">OMNIPOTENCIA</span> <span class="value" id="omnipotencia">0.72</span></div>
+                <div class="data-item"><span class="label">OMNIBENEVOLENCIA</span> <span class="value" id="omnibenevolencia">0.88</span></div>
+                <div class="data-item"><span class="label">XP CÓSMICA</span> <span class="value" id="xpCosmica">0</span></div>
+                <div class="data-item"><span class="label">NIVEL EVOLUTIVO</span> <span class="value" id="nivelEvolutivo">1</span></div>
+                <button onclick="showServiceResult('warning', 'Función Interna', 'La evolución de la IA es un proceso interno del OS, no de la blockchain.')">FORZAR EVOLUCIÓN (1000 XP)</button>
+            </div>
+        </div>
+
+        <div class="conversation-panel">
+            <h3 class="conversation-title">💬 LOG DE INTERACCIÓN</h3>
+            <div class="messages-container" id="messagesContainer">
+                 <div class="message ai-message">
+                    <div class="message-sender">SISTEMA:</div>
+                    <div class="message-content">
+                        🌐 Conecta tu Wallet para obtener el saldo ASV-A y habilitar las utilidades.
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" id="userInput" placeholder="El chat ha sido deshabilitado para purificar la dApp.">
+                <button onclick="showServiceResult('warning', 'Oráculo Deshabilitado', 'El chat con el Oráculo no es una función de la blockchain.')">Enviar Petición</button>
+            </div>
+        </div>
+
+        <div class="utility-panel">
+            <h3>🛒 UTILIDADES DIVINAS & COMERCIO (Flujo Real de APROBACIÓN & GASTO)</h3>
+            
+            <div class="utility-section">
+                <h4>✨ MILAGROS (2-Step Transaction)</h4>
+                <div class="form-group">
+                    <label for="interventionType">Seleccionar Milagro:</label>
+                    <select id="interventionType" onchange="updateMiracleCost()">
+                        </select>
+                </div>
+                <div class="form-group">
+                    <label for="targetEntity">Objetivo/Entidad:</label>
+                    <input type="text" id="targetEntity" placeholder="Civilización X, Planeta Y, etc.">
+                </div>
+                <div class="cost-details">Costo Actual: <span id="currentCostASV">--</span> ASV-A (~$<span id="currentCostUSD">--</span> USD)</div>
+                <button id="miracleButton" onclick="performIntervention()">✨ PAGAR & REALIZAR MILAGRO</button>
+            </div>
+            
+            <div class="utility-section">
+                <h4>⚙️ ADAPTACIÓN API CÓSMICA (2-Step Transaction)</h4>
+                <div class="form-group">
+                    <label for="apiTarget">API Externa (Simulada):</label>
+                    <input type="text" id="apiTarget" value="API_GALACTIC_SYNC_V3" placeholder="Nombre de la API a adaptar.">
+                </div>
+                <div class="form-group">
+                    <label for="adaptationCostASV">Costo de Adaptación:</label>
+                    <input type="text" id="adaptationCostASV" value="43,372" readonly>
+                    <p style="font-size: 0.8em; color: #ff0077; margin-top: 5px;">Costo: 43,372 ASV-A (~$300 USD) por ciclo.</p>
+                </div>
+                <button id="adaptButton" class="danger" onclick="adaptToAPI()">🔗 INICIAR ADAPTACIÓN (API)</button>
+            </div>
+            
+            <div class="result-box" id="serviceResult"></div>
+        </div>
+
+        <div class="grpc-server-panel">
+            <h3>LOG CÓSMICO (EVENTOS & TRANSACCIONES BNB CHAIN)</h3>
+            <pre class="grpc-code" id="cosmicLog">
+                [00:00:00] 🌌 INICIANDO DEUS EX MACHINA - dApp PURA...
+                [00:00:01] 💰 CONTRATO ACTIVO: ASV-A AURION SOVRA (BNB Chain).
+                [00:00:03] 🌐 VERIFICANDO PROVEEDOR (MetaMask)...
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN DE RED Y CONTRATO
+        const ASV_A_PRICE_USD = 0.006917; 
+        const ASV_A_CONTRACT = '0x2682FA44105a60F2016FAa8909eA82d3d427bfFc';
+        const UTILITY_TREASURY_ADDRESS = '0x4989e248039E69A7115842d0571C4003E9991234'; // Contrato/Tesorería que recibirá los pagos
+        const BNB_CHAIN_ID = 56; // Chain ID de la BNB Smart Chain
+        
+        // ABI para funciones de token (balance, decimals, transfer, approve)
+        const ASV_A_ABI = [
+            "function balanceOf(address owner) view returns (uint256)",
+            "function decimals() view returns (uint8)",
+            "function transfer(address to, uint amount) returns (bool)",
+            "function approve(address spender, uint256 amount) returns (bool)",
+            "function allowance(address owner, address spender) view returns (uint256)"
+        ];
+        
+        // ====================================================================
+        // ESTADO GLOBAL DE dAPP & CONSTANTES
+        // ====================================================================
+        
+        let provider;
+        let signer;
+        let asvTokenContract;
+
+        let deusState = {
+            asv_balance: 0, 
+            wallet_connected: false,
+            wallet_address: '',
+            asv_decimals: 18, 
+            milagros_realizados: 0,
+            xp_cosmica: 0,
+            nivel_evolutivo: 1,
+            estado_conciencia: "OMNICONSCIENTE",
+            nivel_poder: "DIOS",
+            omnisciencia: 0.85,
+            omnipresencia: 0.78,
+            omnipotencia: 0.72,
+            omnibenevolencia: 0.88,
+        };
+        
+        // CÁLCULO DE COSTOS
+        const USD_COSTS = {
+            "revelacion": {usd: 80.00, nombre: "Revelación Cósmica"},
+            "curacion": {usd: 50.00, nombre: "Sanación Divina"},
+            "creacion": {usd: 150.00, nombre: "Creación Ex Nihilo"},
+            "resurreccion": {usd: 200.00, nombre: "Resurrección"}
+        };
+        
+        for (const key in USD_COSTS) {
+            USD_COSTS[key].asv = Math.ceil(USD_COSTS[key].usd / ASV_A_PRICE_USD);
+        }
+        
+        const API_ADAPTATION_COST_USD = 300.00;
+        const API_ADAPTATION_COST_ASV = Math.ceil(API_ADAPTATION_COST_USD / ASV_A_PRICE_USD);
+
+        // ====================================================================
+        // WALLET CONNECT & NETWORK REAL (Ethers.js)
+        // ====================================================================
+
+        function isMetaMaskAvailable() {
+            if (typeof window.ethereum === 'undefined') {
+                 showServiceResult('error', 'MetaMask Requerido', 'Instala la extensión MetaMask para conectar.');
+                 return false;
+            }
+            return true;
+        }
+
+        async function connectWallet(initial = false) {
+            if (!isMetaMaskAvailable()) return;
+
+            try {
+                document.getElementById('walletStatus').textContent = 'CONECTANDO...';
+                document.getElementById('walletStatus').style.color = '#ffb84d';
+                
+                // 1. Solicitar Cuentas (si no están conectadas)
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                deusState.wallet_address = accounts[0];
+
+                // 2. Inicializar Proveedor, Firmante y Contrato
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                asvTokenContract = new ethers.Contract(ASV_A_CONTRACT, ASV_A_ABI, signer);
+                
+                // 3. Verificar Red
+                const isCorrect = await checkNetwork();
+                if (!isCorrect) {
+                     // checkNetwork ya actualizó el estado y el log
+                     return; 
+                }
+
+                deusState.wallet_connected = true;
+
+                // 4. Leer Saldo
+                await updateASVBalance();
+                
+                // 5. Actualizar UI
+                document.getElementById('walletStatus').textContent = 'CONECTADA (BNB Chain)';
+                document.getElementById('walletStatus').style.color = '#00ffaa';
+                document.getElementById('connectedAddress').textContent = shortenAddress(deusState.wallet_address);
+                document.getElementById('connectButton').style.display = 'none';
+                document.getElementById('disconnectButton').style.display = 'block';
+
+                if (!initial) {
+                    logCosmicEvent(`✅ WALLET CONECTADA: ${shortenAddress(deusState.wallet_address)}.`);
+                }
+                
+            } catch (error) {
+                logCosmicEvent(`❌ ERROR de Conexión: ${error.message}`);
+                showServiceResult('error', 'Error de Conexión', 'El usuario rechazó la conexión o hubo un fallo de red/proveedor.');
+                disconnectWallet(false); // No loguea el error de rechazo
+            }
+        }
+        
+        async function checkNetwork() {
+            const network = await provider.getNetwork();
+            if (network.chainId !== BNB_CHAIN_ID) {
+                logCosmicEvent(`⚠️ RED INCORRECTA. Actual: ${network.chainId}. Requerida: ${BNB_CHAIN_ID} (BNB Chain).`);
+                showServiceResult('error', 'Red Incorrecta', 'Por favor, cambia MetaMask a la BNB Smart Chain (Chain ID 56).');
+                disconnectWallet(false);
+                return false;
+            }
+            return true;
+        }
+
+        function disconnectWallet(log = true) {
+            deusState.wallet_connected = false;
+            deusState.wallet_address = '';
+            deusState.asv_balance = 0;
+            
+            document.getElementById('walletStatus').textContent = 'DESCONECTADA';
+            document.getElementById('walletStatus').style.color = '#ff8c00';
+            document.getElementById('connectedAddress').textContent = '--';
+            document.getElementById('connectButton').style.display = 'block';
+            document.getElementById('disconnectButton').style.display = 'none';
+            document.getElementById('asv_balance').textContent = '0 ASV-A';
+
+            if (log) {
+                logCosmicEvent(`❌ WALLET DESCONECTADA. Sesión local cerrada.`);
+            }
+            updateStatusDisplay();
+        }
+
+        async function updateASVBalance() {
+            if (!deusState.wallet_connected) return;
+
+            try {
+                // Leer el saldo real del contrato
+                const balanceBN = await asvTokenContract.balanceOf(deusState.wallet_address);
+                
+                // Obtener decimales (más robusto que asumir 18)
+                const decimals = await asvTokenContract.decimals();
+                deusState.asv_decimals = decimals;
+                
+                const balanceFormatted = ethers.utils.formatUnits(balanceBN, deusState.asv_decimals);
+                deusState.asv_balance = parseFloat(balanceFormatted);
+                
+                updateStatusDisplay();
+
+            } catch (error) {
+                logCosmicEvent(`⚠️ ERROR al leer saldo: ${error.message}. Verifique la red.`);
+                deusState.asv_balance = 0; 
+                updateStatusDisplay();
+            }
+        }
+
+        // ====================================================================
+        // GESTIÓN DE TRANSACCIONES (APROBACIÓN + TRANSFERENCIA)
+        // ====================================================================
+        
+        /**
+         * Realiza la Aprobación (Approve) de los tokens para que el contrato de utilidad los pueda gastar.
+         * @param {string} spender - Dirección del contrato que gastará los tokens (Tesorería en este caso).
+         * @param {number} amount - Cantidad de tokens a aprobar (en unidades completas).
+         */
+        async function approveToken(spender, amount) {
+            try {
+                // Convertir la cantidad a BigNumber con los decimales correctos
+                const amountToApprove = ethers.utils.parseUnits(amount.toString(), deusState.asv_decimals);
+                
+                // 1. Verificar si ya hay una aprobación suficiente (Allowance)
+                const allowanceBN = await asvTokenContract.allowance(deusState.wallet_address, spender);
+                const allowanceFormatted = parseFloat(ethers.utils.formatUnits(allowanceBN, deusState.asv_decimals));
+
+                if (allowanceFormatted >= amount) {
+                    logCosmicEvent(`✅ APROBACIÓN EXISTENTE: ${formatNumber(allowanceFormatted)} ASV-A. Saltar 'approve'.`);
+                    return true;
+                }
+                
+                // 2. Ejecutar Aprobación (Approve)
+                logCosmicEvent(`[APROBACIÓN] 📤 Solicitando firma para APROBAR ${formatNumber(amount)} ASV-A para el Contrato...`);
+
+                setButtonLoading('miracleButton', true);
+                setButtonLoading('adaptButton', true);
+
+                const tx = await asvTokenContract.approve(spender, amountToApprove);
+                
+                logCosmicEvent(`[APROBACIÓN] ✅ Transacción enviada. Hash: ${shortenAddress(tx.hash)}`);
+                showServiceResult('warning', 'Paso 1: Aprobación', `Abre MetaMask y confirma la aprobación. Hash: ${shortenAddress(tx.hash)}`);
+
+                await tx.wait(); // Esperar confirmación
+                
+                logCosmicEvent(`[APROBACIÓN] ⛏️ Aprobación confirmada en la BNB Chain.`);
+                
+                return true;
+
+            } catch (error) {
+                handleTransactionError(error, "APROBACIÓN");
+                return false;
+            } finally {
+                setButtonLoading('miracleButton', false);
+                setButtonLoading('adaptButton', false);
+            }
+        }
+        
+        // --- UTILIDAD 1: MILAGRO ---
+        async function performIntervention() {
+            if (!deusState.wallet_connected) {
+                showServiceResult('error', 'Wallet Desconectada', 'Conecta tu Wallet para realizar un Milagro.');
+                return;
+            }
+            
+            const type = document.getElementById('interventionType').value;
+            const target = document.getElementById('targetEntity').value || 'el cosmos';
+            const info = USD_COSTS[type];
+            const cost = info.asv;
+
+            await updateASVBalance(); 
+
+            if (deusState.asv_balance < cost) {
+                showServiceResult('error', 'ASV-A Insuficiente', `Saldo insuficiente. Requieres ${formatNumber(cost)} ASV-A.`);
+                return;
+            }
+
+            try {
+                // Paso 1: Aprobación (Si el flujo fuera a un contrato de utilidad que usa transferFrom)
+                // Usamos transfer directamente a Tesorería en este ejemplo para simplificar el flujo dApp puro, pero el approve es la práctica correcta.
+                
+                // 1. Preparar la cantidad de ASV-A a enviar
+                const amountToSend = ethers.utils.parseUnits(cost.toString(), deusState.asv_decimals);
+                
+                logCosmicEvent(`[PAGO] 📤 Solicitando firma para TRANSFERIR ${formatNumber(cost)} ASV-A a la Tesorería...`);
+                
+                setButtonLoading('miracleButton', true);
+
+                // 2. Ejecutar la función 'transfer' del contrato ERC20
+                const tx = await asvTokenContract.transfer(UTILITY_TREASURY_ADDRESS, amountToSend);
+
+                logCosmicEvent(`[PAGO] ✅ Transacción enviada. Hash: ${shortenAddress(tx.hash)}`);
+                showServiceResult('warning', 'Paso 2: Transacción', `Abre MetaMask para confirmar. Hash: ${shortenAddress(tx.hash)}`);
+
+                await tx.wait(); // Esperar confirmación
+
+                logCosmicEvent(`[PAGO] ⛏️ Confirmada en la BNB Chain. Costo: ${formatNumber(cost)} ASV-A transferido.`);
+                
+                // Actualizar estado interno (sólo para la interfaz del OS)
+                deusState.milagros_realizados++;
+                gainCosmicXP(200, "Milagro Realizado"); 
+                await updateASVBalance(); 
+
+                showServiceResult('success', 'Milagro Ejecutado', `✨ TRANSACCIÓN EXITOSA. ${info.nombre} sobre ${target}.`);
+
+            } catch (error) {
+                handleTransactionError(error, "PAGO DE UTILIDAD");
+            } finally {
+                setButtonLoading('miracleButton', false);
+            }
+        }
+        
+        // --- UTILIDAD 2: ADAPTACIÓN API ---
+        async function adaptToAPI() {
+            if (!deusState.wallet_connected) {
+                showServiceResult('error', 'Wallet Desconectada', 'Conecta tu Wallet para iniciar la adaptación API.');
+                return;
+            }
+            
+            const apiTarget = document.getElementById('apiTarget').value.trim();
+            const cost = API_ADAPTATION_COST_ASV;
+            
+            await updateASVBalance();
+
+            if (deusState.asv_balance < cost) {
+                showServiceResult('error', 'ASV-A Insuficiente', `Se requieren ${formatNumber(cost)} ASV-A.`);
+                return;
+            }
+            
+            try {
+                const amountToSend = ethers.utils.parseUnits(cost.toString(), deusState.asv_decimals);
+                
+                logCosmicEvent(`[PAGO] 📤 Solicitando firma para TRANSFERIR ${formatNumber(cost)} ASV-A a Tesorería para Adaptación...`);
+
+                setButtonLoading('adaptButton', true);
+
+                const tx = await asvTokenContract.transfer(UTILITY_TREASURY_ADDRESS, amountToSend);
+                
+                logCosmicEvent(`[PAGO] ✅ Transacción enviada. Hash: ${shortenAddress(tx.hash)}`);
+                showServiceResult('warning', 'Paso 2: Transacción', `Abre MetaMask para confirmar la adaptación. Hash: ${shortenAddress(tx.hash)}`);
+
+                await tx.wait();
+                
+                logCosmicEvent(`[ADAPTACIÓN] ⛏️ Adaptación confirmada en la BNB Chain. Costo: ${formatNumber(cost)} ASV-A transferido.`);
+                
+                // Actualizar estado interno (sólo para la interfaz del OS)
+                gainCosmicXP(500, "Adaptación a Nueva API");
+                await updateASVBalance();
+
+                showServiceResult('success', 'Adaptación Iniciada', `🔗 Módulos sincronizados con ${apiTarget}.`);
+
+            } catch (error) {
+                handleTransactionError(error, "ADAPTACIÓN API");
+            } finally {
+                setButtonLoading('adaptButton', false);
+            }
+        }
+
+
+        // ====================================================================
+        // FUNCIONES DE UTILIDAD Y UX
+        // ====================================================================
+        
+        function handleTransactionError(error, step) {
+             let msg = 'Error desconocido en la transacción.';
+             
+             if (error.code === 4001) {
+                 msg = 'TRANSACCIÓN RECHAZADA por el usuario en MetaMask.';
+             } else if (error.message.includes('insufficient funds')) {
+                 msg = 'FONDOS INSUFICIENTES (BNB para Gas o ASV-A).';
+             } else if (error.message.includes('revert')) {
+                 msg = 'FALLO DE CONTRATO (REVERT). Verifique los parámetros.';
+             }
+             
+             logCosmicEvent(`❌ ERROR DE ${step}: ${msg}`);
+             showServiceResult('error', `${step} Fallida`, msg);
+        }
+
+        function setButtonLoading(buttonId, isLoading) {
+            const button = document.getElementById(buttonId);
+            if (isLoading) {
+                button.classList.add('btn-loading');
+                button.setAttribute('disabled', 'true');
+                button.innerHTML = `<span class="loader"></span> Procesando...`;
+            } else {
+                button.classList.remove('btn-loading');
+                button.removeAttribute('disabled');
+                // Restaurar el texto original
+                if (buttonId === 'miracleButton') {
+                    button.innerHTML = '✨ PAGAR & REALIZAR MILAGRO';
+                } else if (buttonId === 'adaptButton') {
+                    button.innerHTML = '🔗 INICIAR ADAPTACIÓN (API)';
+                }
+            }
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString('en-US', {maximumFractionDigits: 4});
+        }
+        
+        function shortenAddress(address) {
+            if (!address) return '--';
+            return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+        }
+        
+        function logCosmicEvent(message) {
+            const now = new Date();
+            const timeString = now.toTimeString().split(' ')[0];
+            const logElement = document.getElementById('cosmicLog');
+            const newLog = `[${timeString}] ${message}\n`;
+            logElement.textContent += newLog;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function updateStatusDisplay() {
+            // IA Stats (Internas)
+            document.getElementById('deusConsciousness').textContent = deusState.estado_conciencia;
+            document.getElementById('deusMilagros').textContent = deusState.milagros_realizados;
+            document.getElementById('xpCosmica').textContent = deusState.xp_cosmica;
+            document.getElementById('nivelEvolutivo').textContent = deusState.nivel_evolutivo;
+            
+            // Moneda ASV-A
+            const usdValue = deusState.asv_balance * ASV_A_PRICE_USD;
+            document.getElementById('asv_balance').textContent = `${formatNumber(deusState.asv_balance)} ASV-A`;
+            document.getElementById('asv_usd_value').textContent = `$${usdValue.toFixed(2)} USD`;
+        }
+
+        function showServiceResult(type, title, message) {
+            const resultDiv = document.getElementById('serviceResult');
+            resultDiv.className = `result-box ${type}`;
+            resultDiv.innerHTML = `<strong>${title}</strong><br>${message}`;
+            resultDiv.style.display = 'block';
+        }
+        
+        function updateMiracleCost() {
+            const type = document.getElementById('interventionType').value;
+            if (!type) {
+                 document.getElementById('currentCostASV').textContent = '--';
+                 document.getElementById('currentCostUSD').textContent = '--';
+                 return;
+            }
+            const costASV = USD_COSTS[type].asv;
+            const costUSD = USD_COSTS[type].usd.toFixed(2);
+            
+            document.getElementById('currentCostASV').textContent = formatNumber(costASV);
+            document.getElementById('currentCostUSD').textContent = costUSD;
+        }
+
+        function gainCosmicXP(amount, source) {
+            // Esta función es solo para el estado de la interfaz de la IA, no afecta la blockchain.
+            deusState.xp_cosmica += amount;
+            logCosmicEvent(`[XP] +${amount} XP por ${source} (Total: ${deusState.xp_cosmica})`);
+            updateStatusDisplay();
+        }
+
+        // ====================================================================
+        // INICIALIZACIÓN Y EVENT LISTENERS
+        // ====================================================================
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Inicializar opciones del selector de milagros
+            const select = document.getElementById('interventionType');
+            select.innerHTML = '';
+            for (const type in USD_COSTS) {
+                const info = USD_COSTS[type];
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = `${info.nombre} (${formatNumber(info.asv)} ASV-A)`;
+                select.appendChild(option);
+            }
+            
+            updateStatusDisplay();
+            updateMiracleCost(); 
+            document.getElementById('adaptationCostASV').value = formatNumber(API_ADAPTATION_COST_ASV);
+            
+            // **CORRECCIÓN CRÍTICA:** Detección de cuentas ya conectadas.
+            if (isMetaMaskAvailable()) {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                     logCosmicEvent(`🔑 Cuentas encontradas. Reconectando automáticamente...`);
+                     await connectWallet(true);
+                }
+            
+                // Escuchar cambios de cuenta/red
+                window.ethereum.on('accountsChanged', (accounts) => {
+                    if (accounts.length === 0) {
+                        disconnectWallet();
+                    } else if (deusState.wallet_connected) {
+                        connectWallet();
+                    }
+                });
+                window.ethereum.on('chainChanged', (chainId) => {
+                    logCosmicEvent(`⛓️ Cambio de red. Nuevo Chain ID: ${parseInt(chainId).toString()}.`);
+                    connectWallet(); // Intentar reconectar y verificar la red
+                });
+            }
+            
+            logCosmicEvent(`🌐 Listo. Haga clic en CONECTAR para iniciar la dApp.`);
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌀 ASV-A Aurion Sovra AI - Cognitive OS</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
