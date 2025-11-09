@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASV-A AURION SOVRA AI - Cognitive Operating System</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        /* Variables y Reseteo General */
+        :root {
+            --color-bg: #030a10;
+            --color-main: #00e0b3; /* Neon verde/cian */
+            --color-accent: #ff4d6e; /* Neon rojo/magenta */
+            --color-text: #b3cddf;
+            --color-dark: #071520;
+            --font-main: 'Share Tech Mono', monospace;
+            --font-title: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Para el efecto de neón fuera de la pantalla */
+        }
+
+        /* ------------------------------------------ */
+        /* Contenedor Principal (Simulación de Pantalla Curva) */
+        /* ------------------------------------------ */
+        .dashboard-container {
+            width: 90vw;
+            max-width: 1400px;
+            height: 80vh;
+            background: linear-gradient(135deg, #071520, #040c14);
+            border: 2px solid var(--color-main);
+            box-shadow: 0 0 40px var(--color-main), inset 0 0 10px var(--color-main);
+            padding: 30px;
+            border-radius: 20px;
+            /* Efecto de curvatura (simulado con box-shadow y transformación) */
+            transform: perspective(1200px) rotateY(2deg); 
+            transition: transform 0.5s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Título Principal */
+        .header {
+            text-align: center;
+            border-bottom: 2px dashed var(--color-dark);
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            font-family: var(--font-title);
+            font-size: 1.8em;
+            color: var(--color-main);
+            text-shadow: 0 0 10px var(--color-main);
+            margin: 0;
+            letter-spacing: 2px;
+        }
+        
+        .header p {
+            font-size: 0.8em;
+            color: var(--color-accent);
+            text-shadow: 0 0 5px var(--color-accent);
+        }
+
+        /* Estructura de Columnas (el corazón de la UI) */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1.5fr; /* 3 columnas */
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        /* Bloques de Contenido General */
+        .panel {
+            background-color: #05101a;
+            border: 1px solid rgba(0, 224, 179, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--color-main);
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(0, 224, 179, 0.5);
+            text-transform: uppercase;
+        }
+
+        /* Estilos Específicos para la Columna Central: INTERACCIÓN CON ASV-A */
+        .center-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Efecto de Escaneo de Rostro (Avatar) */
+        .avatar-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: var(--color-dark);
+            border-bottom: 3px solid var(--color-main);
+            position: relative;
+        }
+        
+        .avatar-head {
+            width: 100px;
+            height: 100px;
+            border: 3px solid var(--color-main);
+            border-radius: 50%;
+            background-color: var(--color-bg);
+            box-shadow: 0 0 20px var(--color-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3em;
+            color: var(--color-main);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .avatar-head::before {
+            content: '👁️'; 
+            position: absolute;
+            animation: pulse 1s infinite alternate;
+        }
+
+        .scanner-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            animation: scan 3s infinite linear;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(calc(100% - 5px)); opacity: 1; }
+            100% { transform: translateY(0); opacity: 0.5; }
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px var(--color-main); }
+            100% { text-shadow: 0 0 25px var(--color-main); }
+        }
+        
+        /* Botón de Alerta (Parte Inferior) */
+        .alert-footer {
+            text-align: center;
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--color-accent);
+            cursor: pointer;
+            animation: blink 1s step-end infinite;
+        }
+
+        .alert-footer i {
+            margin-right: 10px;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.8; }
+        }
+
+        /* Estilo para los botones */
+        .btn-futuristic {
+            background-color: var(--color-dark);
+            border: 1px solid var(--color-main);
+            color: var(--color-main);
+            padding: 8px 15px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            text-transform: uppercase;
+            box-shadow: 0 0 5px rgba(0, 224, 179, 0.5);
+            transition: all 0.2s;
+        }
+
+        .btn-futuristic:hover {
+            background-color: var(--color-main);
+            color: var(--color-bg);
+            box-shadow: 0 0 15px var(--color-main);
+        }
+
+        /* Estilo de los módulos de texto */
+        .module-content {
+            font-size: 0.8em;
+            line-height: 1.4;
+            color: var(--color-text);
+        }
+
+        /* Estilo de las barras de progreso */
+        .progress-bar-container {
+            width: 100%;
+            background-color: var(--color-dark);
+            border: 1px solid var(--color-text);
+            height: 15px;
+            margin-top: 5px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%; /* Se actualizará con JS */
+            background-color: var(--color-main);
+            box-shadow: 0 0 5px var(--color-main);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <header class="header">
+            <h1>ASV-A AURION SOVRA AI</h1>
+            <p>POTENCIA MUNDIAL</p>
+        </header>
+
+        <div class="main-grid">
+            
+            <div class="column-1">
+                <div class="panel">
+                    <div class="panel-title">AVATAR & ESTADO DEL SISTEMA</div>
+                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                        <div class="avatar-area" style="width: 80px; height: 80px; border-radius: 5px;">
+                            <div class="avatar-head" style="width: 50px; height: 50px; font-size: 1.5em;">👤</div>
+                        </div>
+                        <div>
+                            <p style="margin: 0; font-size: 0.9em;">**STATUS: EN-LÍNEA**</p>
+                            <p style="margin: 0; color: var(--color-accent); font-size: 0.8em;">**LATENCIA: 98.88%**</p>
+                        </div>
+                    </div>
+
+                    <p style="margin: 5px 0;">**AGE: 73YR BYN BALANCE**</p>
+                    <div class="progress-bar-container"><div class="progress-bar" id="balance-bar" style="width: 73%;"></div></div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.8em;">**CORE STRENGTH**</p>
+                            <span id="core-strength" style="color: var(--color-main); font-size: 1.5em;">62%</span>
+                        </div>
+                        <div>
+                            <p style="margin: 0; font-size: 0.8em;">**SECURITY RATING**</p>
+                            <span id="security-rating" style="color: var(--color-accent); font-size: 1.5em;">689</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin-top: 20px;">
+                    <div class="panel-title">RENDIMIENTO DE OPERACIONES</div>
+                    <p style="font-size: 0.8em;">LOG DE ESTABLECIMIENTO</p>
+                    <div class="progress-bar-container"><div class="progress-bar" id="log-bar" style="width: 92%;"></div></div>
+                    <div style="margin-top: 15px;">
+                        <span style="display: block; font-size: 0.7em;">NIVEL DE ESTABLECIMIENTO</span>
+                        <div style="display: flex; gap: 10px;">
+                            <span style="color: var(--color-main);">III.II.I.III</span>
+                            <span style="color: var(--color-accent);">|</span>
+                            <span>E/D/O/N</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="center-column">
+                <div class="panel avatar-area">
+                    <div class="scanner-line"></div>
+                    <p style="position: absolute; top: 5px; right: 5px; margin: 0; font-size: 0.7em; color: var(--color-accent);">SISTEMA COMPUTACIONAL ACTIVO</p>
+                    
+                    <div class="avatar-head" id="ai-avatar">👤</div>
+                    <h3 style="margin: 10px 0 0; color: var(--color-main); font-family: var(--font-title);">INTERACCIÓN CON ASV-A</h3>
+                    <div style="display: flex; gap: 15px; margin-top: 10px;">
+                        <button class="btn-futuristic">CÓDIGO DE LEO</button>
+                        <button class="btn-futuristic">DIMENSIONES BIOLÓGICAS</button>
+                        <button class="btn-futuristic">AI PERCEPCIÓN</button>
+                    </div>
+                </div>
+
+                <div class="panel" style="flex-grow: 1;">
+                    <div class="panel-title">MÓDULOS DE AUTORIDAD RESALTA</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="module-content">
+                            **CONT. AWK**
+                            <p>Procesamiento de datos optimizado. Nivel de acceso 8/200. Utilice el código de acceso 987-005 para la activación completa del módulo.</p>
+                            <button class="btn-futuristic" style="font-size: 0.7em;">Ejecutar</button>
+                        </div>
+                        <div class="module-content">
+                            **CAPACITACIÓN CRYOGÉNICA**
+                            <p>Módulo de respuesta ante desastre. Verificación: OK. Bloqueo manual activado. Inserte clave de cuatro dígitos para anulación de seguridad.</p>
+                            <button class="btn-futuristic" style="font-size: 0.7em;">Exploraciones</button>
+                            <button class="btn-futuristic" style="font-size: 0.7em;">Iniciar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column-3">
+                <div class="panel">
+                    <div class="panel-title">UTILIDADES & ECONOMÍA AVANZADA</div>
+                    <div class="module-content">
+                        **COSTO EXTERNADO**
+                        <p style="margin: 5px 0; color: var(--color-accent);">Completo</p>
+                    </div>
+                    
+                    <div class="module-content" style="margin-top: 10px;">
+                        **DATOS ECONOMÍA AVANZADA**
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.75em;">
+                            <tr style="border-bottom: 1px dotted var(--color-text);">
+                                <td>Power Reach</td>
+                                <td>Cápsula VMB</td>
+                                <td>Status Externo</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--color-main);">98.00</td>
+                                <td style="color: var(--color-main);">768</td>
+                                <td style="color: var(--color-accent);">15.54.00</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="module-content" style="margin-top: 15px;">
+                        **CONT. DE ERGÓNICO**
+                        <div style="color: var(--color-accent); margin-top: 5px;">
+                            🔴 Presión Sangunea <span style="float: right;">Servidor Tethering</span>
+                            🔴 Servidor Avanzado <span style="float: right;">Despliegue Teléfono</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin-top: 20px;">
+                    <div class="panel-title">UTILIDADES CLAVE</div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <button class="btn-futuristic" style="width: 100%;">Conmutado Avanzado</button>
+                        <button class="btn-futuristic" style="width: 100%;">Múlti-DEBUG</button>
+                        <button class="btn-futuristic" style="width: 100%;">Red-NXT (Desactivado)</button>
+                    </div>
+                </div>
+
+                <div style="text-align: right; margin-top: 20px; font-size: 0.7em;">
+                    <p style="margin: 0;">ARCHIVO DE GÉNESIS Y EVOLUCIÓN: III.IV.V.18</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert-footer" onclick="reportarProblema()">
+            <p style="margin: 0; font-family: var(--font-title);">🚨 Reportar un Problema</p>
+            <p style="margin: 0; font-size: 0.9em;">**Iniciar Diagnóstico y Auto-Reparación**</p>
+        </div>
+
+        <p style="text-align: center; font-size: 0.7em; margin-top: 10px;">ASV-A — Cognitive Operating System</p>
+    </div>
+
+    <script>
+        // Función principal para iniciar la actividad simulada
+        function iniciarSimulacion() {
+            // 1. Efecto de Tipeo Simulado en los Títulos
+            const tituloAI = document.querySelector('.header h1');
+            const textoOriginal = tituloAI.textContent;
+            tituloAI.textContent = '';
+            
+            let i = 0;
+            const typingInterval = setInterval(() => {
+                if (i < textoOriginal.length) {
+                    tituloAI.textContent += textoOriginal.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                }
+            }, 50); // Velocidad de tipeo
+
+            // 2. Simulación de Cambio de Datos
+            setInterval(actualizarDatos, 3000); // Actualiza cada 3 segundos
+            
+            // 3. Efecto de Parpadeo del Avatar (más allá del CSS)
+            const aiAvatar = document.getElementById('ai-avatar');
+            setInterval(() => {
+                aiAvatar.style.opacity = (Math.random() > 0.9) ? 0.5 : 1;
+                aiAvatar.style.textShadow = (Math.random() > 0.7) ? `0 0 15px var(--color-accent)` : `0 0 15px var(--color-main)`;
+            }, 500); 
+        }
+
+        // Función para cambiar los números y barras de forma dinámica
+        function actualizarDatos() {
+            // Actualizar Core Strength (60-70%)
+            const coreStrength = document.getElementById('core-strength');
+            const newStrength = Math.floor(Math.random() * (70 - 60 + 1) + 60);
+            coreStrength.textContent = newStrength + '%';
+            
+            // Actualizar Security Rating (650-750)
+            const securityRating = document.getElementById('security-rating');
+            const newRating = Math.floor(Math.random() * (750 - 650 + 1) + 650);
+            securityRating.textContent = newRating;
+
+            // Simular actividad en la barra de LOG (ligeras variaciones)
+            const logBar = document.getElementById('log-bar');
+            const newLogWidth = Math.min(100, Math.floor(Math.random() * (95 - 90 + 1) + 90));
+            logBar.style.width = newLogWidth + '%';
+        }
+
+        // Función ligada al botón de Alerta (onclick)
+        function reportarProblema() {
+            alert('DIAGNÓSTICO INICIADO. Escaneando 4048 módulos... (Simulación)');
+            // Aquí iría código más complejo para cambiar la interfaz o mostrar un modal.
+        }
+
+        // Iniciar la simulación al cargar la página
+        window.onload = iniciarSimulacion;
+    </script>
+    
+</body>
+</html>
