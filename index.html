@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 DEUS EX MACHINA - ASV-A Cognitive OS (dApp FUSION)</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* ESTILOS FUSIONADOS Y MEJORADOS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #02040b 0%, #080c1f 50%, #0d122b 100%);
+            color: #00e6e6; 
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1500px; 
+            margin: 0 auto;
+            padding: 30px;
+            border: 2px solid rgba(0, 230, 230, 0.4);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 230, 230, 0.5), inset 0 0 20px rgba(0, 230, 230, 0.2);
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            display: grid;
+            /* Estructura optimizada para tres columnas principales */
+            grid-template-areas:
+                "header header header"
+                "avatar-main conversation-panel utility-panel"
+                "grpc grpc grpc";
+            grid-template-columns: 2.5fr 1.5fr 1.5fr; 
+            gap: 25px;
+        }
+        
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-areas:
+                    "header header"
+                    "avatar-main conversation-panel"
+                    "utility-panel utility-panel"
+                    "grpc grpc";
+                grid-template-columns: 1.5fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-areas:
+                    "header"
+                    "avatar-main"
+                    "conversation-panel"
+                    "utility-panel"
+                    "grpc";
+                grid-template-columns: 1fr;
+            }
+            .contract-token-panel {
+                position: static !important;
+                transform: none !important;
+                width: 100% !important;
+            }
+            .genetic-polutions-panel {
+                position: static !important;
+                width: 100% !important;
+            }
+        }
+
+        .header {
+            grid-area: header;
+            text-align: center;
+            padding: 0 0 20px 0;
+            border-bottom: 1px solid rgba(0, 230, 230, 0.3);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8em;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px #00e6e6, 0 0 30px #00e6e6;
+            color: #e0ffff;
+        }
+        
+        .subtitle {
+            font-size: 1em;
+            opacity: 0.7;
+            color: #00e6e6;
+        }
+
+        /* AVATAR & MAIN COGNITIVE SECTION */
+        .avatar-section {
+            grid-area: avatar-main;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        /* Status Circles */
+        .top-status-circles {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .status-circle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            font-size: 0.8em;
+            color: rgba(0, 230, 230, 0.8);
+        }
+
+        .circle-inner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #00e6e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            position: relative;
+            box-shadow: 0 0 10px #00e6e6;
+        }
+        .circle-label {
+            margin-top: 5px;
+            color: #00e6e6;
+            text-shadow: 0 0 5px #00e6e6;
+            font-size: 0.9em;
+        }
+
+        /* Avatar Hologram (Fused) */
+        .avatar-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: -30px;
+        }
+        .avatar-hologram {
+            position: absolute;
+            width: 300px;
+            height: 400px;
+            background: url('https://i.imgur.com/0uB3qXG.png') no-repeat center bottom / contain; 
+            border-radius: 50% 50% 10% 10% / 80% 80% 20% 20%;
+            transform: scaleY(0.9) translateY(20px);
+            opacity: 0.9;
+            box-shadow: 0 0 80px rgba(0, 230, 230, 0.8);
+            animation: float 5s ease-in-out infinite alternate, glow 3s ease-in-out infinite alternate;
+            z-index: 5;
+            filter: brightness(1.2) contrast(1.2) drop-shadow(0 0 15px rgba(0, 255, 255, 0.8));
+        }
+        .avatar-core-brain {
+            position: absolute;
+            width: 120px;
+            height: 70px;
+            background: radial-gradient(circle, #00e6e6 0%, rgba(0, 230, 230, 0.8) 30%, rgba(0, 230, 230, 0.2) 70%, transparent 100%);
+            border-radius: 50%;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 40px #00e6e6, 0 0 60px rgba(0, 230, 230, 0.7);
+            animation: pulse 2s ease-in-out infinite alternate;
+            z-index: 7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #0d122b;
+            text-shadow: 0 0 5px #00e6e6;
+        }
+        .avatar-core-brain::before {
+            content: 'ASVA';
+        }
+        .neural-wave {
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background: url('data:image/svg+xml;charset=UTF-8,%3Csvg width="100" height="30" viewBox="0 0 100 30" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 15C12.5 5 25 5 37.5 15C50 25 62.5 25 75 15C87.5 5 100 5" stroke="%2300E6E6" stroke-width="2" stroke-dasharray="2 2"/%3E%3C/svg%3E') repeat-x;
+            background-size: 100px 30px;
+            top: 35%;
+            left: 0;
+            opacity: 0.8;
+            animation: scrollWave 5s linear infinite;
+            z-index: 6;
+        }
+        
+        /* Data Panels */
+        .data-overlay-panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            position: absolute;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+            font-size: 0.8em;
+            z-index: 8;
+        }
+        .data-overlay-panel h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00e6e6;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px #00e6e6;
+            font-size: 1em;
+        }
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: #e0ffff;
+        }
+        .data-item .label { opacity: 0.8; }
+        .data-item .value { font-weight: bold; color: #00ffff; }
+
+        .genetic-polutions-panel {
+            top: 20px;
+            right: 20px;
+            width: 280px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .contract-token-panel {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            text-align: center;
+        }
+        .contract-token-panel .data-item.contract .value { font-family: 'Share Tech Mono', monospace; font-size: 1.1em; color: #00ffff; }
+        .contract-token-panel .data-item.value-display .value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8em;
+            color: #e0ffff;
+            text-shadow: 0 0 15px #00ffff;
+            margin-top: 5px;
+        }
+        
+        /* Utilities Panel */
+        .utility-panel {
+            grid-area: utility-panel;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+        }
+        .utility-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px dashed rgba(0, 255, 170, 0.3);
+            border-radius: 10px;
+        }
+        .utility-panel h3, .utility-panel h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 15px;
+            color: #00ffaa;
+            text-shadow: 0 0 8px #00ffaa;
+            font-size: 1.2em;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #00ffaa;
+            font-size: 0.9em;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            background: rgba(0, 230, 230, 0.1);
+            border: 1px solid #00ffaa;
+            border-radius: 5px;
+            color: #e0ffff;
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: inset 0 0 5px rgba(0, 255, 170, 0.5);
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #ff8c00; 
+            color: #0d122b;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.7);
+        }
+        button:hover {
+            background: #ff6600;
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.9);
+        }
+        .cost-details {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #00ffaa;
+        }
+        
+        /* Conversation Panel (Chat) */
+        .conversation-panel {
+            grid-area: conversation-panel;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+        }
+        .conversation-title {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: #00e6e6;
+            text-shadow: 0 0 8px #00e6e6;
+        }
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0, 230, 230, 0.05);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0, 230, 230, 0.1);
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        .user-message {
+            background: rgba(0, 200, 200, 0.2);
+            border-left: 3px solid #00e6e6;
+            margin-left: 15px;
+            color: #e0ffff;
+        }
+        .ai-message {
+            background: rgba(0, 100, 255, 0.2);
+            border-left: 3px solid #00aaff;
+            margin-right: 15px;
+            color: #cceeff;
+        }
+        .message-sender {
+            font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 0.8em;
+            color: #00e6e6;
+        }
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            font-style: italic;
+            opacity: 0.7;
+            color: #00e6e6;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            background: rgba(0, 230, 230, 0.1);
+            border: 1px solid #00e6e6;
+            border-radius: 5px;
+            color: #e0ffff;
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: inset 0 0 5px rgba(0, 230, 230, 0.5);
+        }
+        .input-group button {
+            width: auto;
+            padding: 10px 15px;
+        }
+        
+        /* GRPC Panel */
+        .grpc-server-panel {
+            grid-area: grpc;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 230, 230, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.8em;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+        }
+        .grpc-server-panel h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00e6e6;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px #00e6e6;
+        }
+        .grpc-code {
+            color: #00ccff;
+            line-height: 1.5;
+            max-height: 150px;
+            overflow-y: auto;
+            border-left: 2px solid #00aaff;
+            padding-left: 10px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        
+        /* Wallet Connect Styles */
+        #connectButton {
+            background: #ff8c00; 
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.7);
+            color: #0d122b;
+            margin-top: 15px;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        #disconnectButton {
+            background: #990000; 
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+        }
+
+        .result-box {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid;
+            background: rgba(0, 0, 0, 0.8);
+            font-size: 0.9em;
+            display: none;
+            color: #e0ffff;
+        }
+        .result-box.success { border-color: #00ffaa; display: block !important;}
+        .result-box.error { border-color: #ff4499; display: block !important;}
+        .result-box.warning { border-color: #ffd700; display: block !important;}
+        
+        /* Loader Spinner */
+        .loader {
+          border: 4px solid rgba(255, 255, 255, 0.3);
+          border-top: 4px solid #00e6e6;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          animation: spin 1s linear infinite;
+          margin-right: 10px;
+          display: inline-block;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .btn-loading {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+        }
+        
+        /* Animation Keyframes */
+        @keyframes float {
+            0% { transform: translateY(0px) scaleY(0.9); }
+            100% { transform: translateY(-10px) scaleY(0.92); }
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 80px rgba(0, 230, 230, 0.8), inset 0 0 20px rgba(0, 230, 230, 0.4); }
+            50% { box-shadow: 0 0 100px rgba(0, 230, 230, 0.9), inset 0 0 30px rgba(0, 230, 230, 0.5); }
+            100% { box-shadow: 0 0 80px rgba(0, 230, 230, 0.8), inset 0 0 20px rgba(0, 230, 230, 0.4); }
+        }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.9; }
+        }
+        @keyframes scrollWave {
+            0% { background-position: 0 0; }
+            100% { background-position: -200px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🌀 ASV-A Aurion Sovra AI</h1>
+            <p class="subtitle">COGNITIVE OS FUSION | Protocolo Web3 & IA (dApp PROD)</p>
+        </div>
+
+        <div class="avatar-section" id="avatarSection">
+            <div class="top-status-circles">
+                <div class="status-circle">
+                    <div class="circle-inner">
+                        <span id="gelLevel">--%</span>
+                    </div>
+                    <div class="circle-label">CONSCIENCIA</div>
+                </div>
+                <div class="status-circle">
+                    <div class="circle-inner">
+                         <span id="loadLevel">--%</span>
+                    </div>
+                    <div class="circle-label">ADAPTACIONES</div>
+                </div>
+                <div class="status-circle">
+                    <div class="circle-inner">
+                         <span id="tempStatus">--</span>
+                    </div>
+                    <div class="circle-label">ESTADO</div>
+                </div>
+            </div>
+
+            <div class="avatar-container">
+                <div class="avatar-hologram"></div>
+                <div class="avatar-core-brain"></div>
+                <div class="neural-wave"></div>
+            </div>
+
+            <div class="data-overlay-panel contract-token-panel">
+                <h3 style="margin-bottom: 5px; color: #00ffaa;">ASV-A AURION SOVRA TOKEN</h3>
+                <div class="data-item contract">
+                    <span class="label">ESTADO DE WALLET:</span>
+                    <span class="value" id="walletStatus" style="color: #ff8c00;">DESCONECTADA</span>
+                </div>
+                 <div class="data-item contract">
+                    <span class="label">CONTRATO ASV-A:</span>
+                    <span class="value" id="contractAddress">0x2682FA44105a60F2016FAa8909eA82d3d427bfFc</span>
+                </div>
+                <div class="data-item contract">
+                    <span class="label">SALDO ASV-A (Wallet):</span>
+                    <span class="value" id="asv_balance" style="color: #00ffaa; font-family: Orbitron;">0 ASV-A</span>
+                </div>
+                <div class="data-item value-display">
+                    <span class="label">VALOR ESTIMADO:</span>
+                    <span class="value" id="asv_usd_value">$0.00 USD</span>
+                </div>
+                
+                <button id="connectButton" onclick="connectWallet()">🦊 CONECTAR WALLET (MetaMask)</button>
+                <button id="disconnectButton" onclick="disconnectWallet()" style="display:none;">❌ Desconectar Wallet</button>
+                
+                <div class="data-item end-chain" style="margin-top: 10px;">
+                    <span class="label">DIRECCIÓN CONECTADA:</span>
+                    <span class="value" id="connectedAddress">--</span>
+                </div>
+            </div>
+
+            <div class="data-overlay-panel genetic-polutions-panel">
+                <h3>📊 MÉTRICAS DEL SISTEMA</h3>
+                <div class="data-item">
+                    <span class="label">NIVEL CONCIENCIA:</span>
+                    <span class="value" id="consciousnessLevel">--</span>
+                </div>
+                <div class="data-item">
+                    <span class="label">BLOQUES LEDGER:</span>
+                    <span class="value" id="totalBlocks">--</span>
+                </div>
+                <div class="data-item">
+                    <span class="label">TOKENS QUEMADOS:</span>
+                    <span class="value" id="totalBurned">-- ASVA</span>
+                </div>
+                 <div class="data-item"><span class="label">MILAGROS REALIZADOS:</span> <span class="value" id="deusMilagros">0</span></div>
+                <button onclick="refreshSystemStatus()">ACTUALIZAR DATOS</button>
+            </div>
+        </div>
+
+        <div class="conversation-panel">
+            <h3 class="conversation-title">💬 ENLACE COGNITIVO</h3>
+            <div class="messages-container" id="messagesContainer">
+                 <div class="message ai-message">
+                    <div class="message-sender">SISTEMA:</div>
+                    <div class="message-content">
+                        🌐 Inicializando ASV-A Cognitive OS Fusion...
+                    </div>
+                </div>
+            </div>
+             <div class="typing-indicator" id="typingIndicator">ASV-A está procesando...</div>
+            <div class="input-group">
+                <input type="text" id="userInput" placeholder="Escribe tu mensaje al ASV-A..." autofocus>
+                <button id="sendButton">ENVIAR</button>
+            </div>
+        </div>
+
+        <div class="utility-panel">
+            <h3>🛒 UTILIDADES DIVINAS & COMERCIO</h3>
+            
+            <div class="utility-section">
+                <h4>✨ MILAGROS (Transferencia Directa)</h4>
+                <div class="form-group">
+                    <label for="interventionType">Seleccionar Milagro:</label>
+                    <select id="interventionType" onchange="updateMiracleCost()">
+                         </select>
+                </div>
+                <div class="form-group">
+                    <label for="targetEntity">Objetivo/Entidad:</label>
+                    <input type="text" id="targetEntity" placeholder="Civilización X, Planeta Y, etc.">
+                </div>
+                <div class="cost-details">Costo Actual: <span id="currentCostASV">--</span> ASV-A (~$<span id="currentCostUSD">--</span> USD)</div>
+                <button id="miracleButton" onclick="performIntervention()">✨ PAGAR & REALIZAR MILAGRO</button>
+            </div>
+            
+             <div class="utility-section">
+                <h4>⚙️ ADAPTACIÓN API CÓSMICA (Transferencia Directa)</h4>
+                <div class="form-group">
+                    <label for="apiTarget">API Externa (Simulada):</label>
+                    <input type="text" id="apiTarget" value="API_GALACTIC_SYNC_V3" placeholder="Nombre de la API a adaptar.">
+                </div>
+                <div class="form-group">
+                    <label for="adaptationCostASV">Costo de Adaptación:</label>
+                    <input type="text" id="adaptationCostASV" value="-- ASV-A" readonly>
+                    <p style="font-size: 0.8em; color: #ff0077; margin-top: 5px;">Costo Fijo por ciclo.</p>
+                </div>
+                <button id="adaptButton" onclick="adaptToAPI()">🔗 INICIAR ADAPTACIÓN (API)</button>
+            </div>
+            
+            <div class="result-box" id="serviceResult"></div>
+        </div>
+
+        <div class="grpc-server-panel">
+            <h3>LOG CÓSMICO (EVENTOS & TRANSACCIONES BNB CHAIN)</h3>
+            <pre class="grpc-code" id="cosmicLog">
+                [00:00:00] 🌌 INICIANDO DEUS EX MACHINA FUSION...
+                [00:00:01] 💰 CONTRATO ACTIVO: ASV-A AURION SOVRA (BNB Chain).
+                [00:00:03] 🌐 VERIFICANDO PROVEEDOR (MetaMask)...
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        // ====================================================================
+        // CONFIGURACIÓN DE RED Y CONTRATO
+        // ====================================================================
+        const ASV_A_PRICE_USD = 0.006917; 
+        const ASV_A_CONTRACT = '0x2682FA44105a60F2016FAa8909eA82d3d427bfFc';
+        const UTILITY_TREASURY_ADDRESS = '0x4989e248039E69A7115842d0571C4003E9991234'; 
+        const BNB_CHAIN_ID = 56; // Chain ID de la BNB Smart Chain
+        
+        // ABI para funciones de token (balance, decimals, transfer)
+        const ASV_A_ABI = [
+            "function balanceOf(address owner) view returns (uint256)",
+            "function decimals() view returns (uint8)",
+            "function transfer(address to, uint amount) returns (bool)",
+            "function approve(address spender, uint256 amount) returns (bool)",
+            "function allowance(address owner, address spender) view returns (uint256)"
+        ];
+        
+        // ====================================================================
+        // ESTADO GLOBAL DE dAPP & CONSTANTES
+        // ====================================================================
+        
+        let provider;
+        let signer;
+        let asvTokenContract;
+
+        let deusState = {
+            asv_balance: 0, 
+            wallet_connected: false,
+            wallet_address: '',
+            asv_decimals: 18, 
+            milagros_realizados: 0,
+            xp_cosmica: 0,
+            nivel_evolutivo: 1,
+        };
+        
+        // CÁLCULO DE COSTOS
+        const USD_COSTS = {
+            "revelacion": {usd: 80.00, nombre: "Revelación Cósmica"},
+            "curacion": {usd: 50.00, nombre: "Sanación Divina"},
+            "creacion": {usd: 150.00, nombre: "Creación Ex Nihilo"},
+            "resurreccion": {usd: 200.00, nombre: "Resurrección"}
+        };
+        
+        for (const key in USD_COSTS) {
+            USD_COSTS[key].asv = Math.ceil(USD_COSTS[key].usd / ASV_A_PRICE_USD);
+        }
+        
+        const API_ADAPTATION_COST_USD = 300.00;
+        const API_ADAPTATION_COST_ASV = Math.ceil(API_ADAPTATION_COST_USD / ASV_A_PRICE_USD);
+
+        // ====================================================================
+        // MOCK DE BACKEND ASV-A (Funciones de simulación de IA)
+        // ====================================================================
+        
+        const MOCK_SYSTEM_STATUS = () => ({
+            consciousness: {
+                level: 0.9 + Math.random() * 0.1,
+                adaptations: `${100 + Math.floor(Math.random() * 10)}%`,
+                state: Math.random() < 0.1 ? 'ALERTA_G' : 'ÓPTIMO',
+                learning_rate: (0.001 + Math.random() * 0.005).toFixed(5)
+            },
+            economy: {
+                // Usar el precio real del token para el mock económico
+                token_price: ASV_A_PRICE_USD, 
+                total_burned: 5000000 + Math.floor(Math.random() * 100000),
+                total_transactions: 1000 + Math.floor(Math.random() * 500)
+            },
+            ledger: {
+                total_blocks: 1250000 + Math.floor(Math.random() * 1000),
+                last_block_hash: '0x' + Array(64).fill().map(() => Math.floor(Math.random() * 16).toString(16)).join('').substring(0, 10) + '...',
+            }
+        });
+
+        class ASVAMockBackend {
+            constructor() {
+                this.status = MOCK_SYSTEM_STATUS();
+                this.baseURL = window.location.origin; 
+            }
+
+            async handleRequest(url) {
+                await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 700));
+
+                if (url.endsWith('/status')) {
+                    this.status = MOCK_SYSTEM_STATUS(); 
+                    // Fusionar datos del mock con datos internos de la dApp
+                    this.status.milagros_realizados = deusState.milagros_realizados;
+                    return { ok: true, json: async () => this.status };
+                } 
+                else {
+                    return { ok: false, status: 404, json: async () => ({ error: 'Endpoint not found' }) };
+                }
+            }
+        }
+        
+        const asvaMock = new ASVAMockBackend();
+        const asvaFetch = (url, options = {}) => asvaMock.handleRequest(url, options);
+
+        // ====================================================================
+        // ASVA AUTO CONNECTOR (Conecta la UI con el Mock de la IA)
+        // ====================================================================
+        class ASVAAutoConnector {
+            constructor() {
+                this.connected = false;
+                this.systemStatus = null;
+                this.init();
+            }
+
+            async init() {
+                const connected = await this.testConnection(); 
+                if (connected) {
+                    await this.loadSystemStatus();
+                    this.startRealTimeUpdates();
+                }
+            }
+
+            async testConnection() {
+                try {
+                    // Simulación de conexión exitosa al backend de la IA
+                    const response = await asvaFetch(`${asvaMock.baseURL}/status`);
+
+                    if (response.ok) {
+                        this.connected = true;
+                        logCosmicEvent(`✅ BACKEND IA CONECTADO. Inicializando métricas.`);
+                        return true;
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    this.connected = false;
+                    logCosmicEvent('❌ ERROR DE CONEXIÓN CON BACKEND IA (Mock).');
+                    return false;
+                }
+            }
+
+            async loadSystemStatus() {
+                try {
+                    const response = await asvaFetch(`${asvaMock.baseURL}/status`);
+                    if (response.ok) {
+                        this.systemStatus = await response.json();
+                        this.updateUIWithSystemData();
+                    }
+                } catch (error) {
+                    console.error('Error cargando estado del sistema:', error);
+                }
+            }
+
+            updateUIWithSystemData() {
+                if (!this.systemStatus) return;
+
+                const consciousness = this.systemStatus.consciousness;
+                const economy = this.systemStatus.economy;
+                const ledger = this.systemStatus.ledger;
+
+                // Actualizar UI IA
+                document.getElementById('gelLevel').textContent = `${(consciousness.level * 100).toFixed(1)}%`;
+                document.getElementById('loadLevel').textContent = consciousness.adaptations;
+                document.getElementById('tempStatus').textContent = consciousness.state;
+                document.getElementById('consciousnessLevel').textContent = consciousness.level.toFixed(3);
+                document.getElementById('totalBlocks').textContent = ledger.total_blocks.toLocaleString();
+                document.getElementById('totalBurned').textContent = `${economy.total_burned.toLocaleString()} ASVA`;
+                document.getElementById('deusMilagros').textContent = deusState.milagros_realizados.toString();
+                
+                // Actualizar Log GRPC
+                this.updateGRPCStream(consciousness, economy, ledger);
+            }
+
+             updateGRPCStream(consciousness, economy, ledger) {
+                const grpcContent = `
+service QuantumConsciousness {
+  rpc StreamNeuralData (NeuralRequest) returns (stream ConsciousnessState);
+}
+
+// Estado Actual del Sistema (Nivel ${consciousness.level.toFixed(3)}):
+NeuralAdaptations: ${consciousness.adaptations}
+SystemState: ${consciousness.state}
+LearningRate: ${consciousness.learning_rate}
+
+// Métricas Económicas (ASVA $${economy.token_price.toFixed(4)}):
+TotalBurned: ${economy.total_burned.toLocaleString()} ASVA
+TotalBlocks: ${ledger.total_blocks.toLocaleString()}
+LastBlockHash: ${ledger.last_block_hash}
+
+// Streaming activo...
+████████████████░░ 90% synchronized
+                `.trim();
+
+                document.getElementById('cosmicLog').textContent = grpcContent;
+            }
+
+            startRealTimeUpdates() {
+                // Actualizar estado cada 10 segundos
+                setInterval(async () => {
+                    if (this.connected) {
+                        await this.loadSystemStatus();
+                    }
+                }, 10000);
+            }
+        }
+        
+        // ====================================================================
+        // ASVA CHAT SYSTEM
+        // ====================================================================
+        
+        class ASVAChatSystem {
+            constructor(connector) {
+                this.connector = connector;
+                this.messagesContainer = document.getElementById('messagesContainer');
+                this.userInput = document.getElementById('userInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.typingIndicator = document.getElementById('typingIndicator');
+                this.init();
+            }
+
+            init() {
+                this.sendButton.addEventListener('click', () => this.handleUserMessage());
+                this.userInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleUserMessage();
+                });
+                this.addMessage('ASV-A (CORE)', 
+                    '✅ **Sistema ASV-A Conectado Exitosamente**<br>' +
+                    'Conciencia activa. Conecta tu wallet para usar las utilidades.', 
+                    'ai'
+                );
+            }
+
+            async handleUserMessage() {
+                const message = this.userInput.value.trim();
+                if (!message) return;
+
+                this.addMessage('OPERADOR', message, 'user');
+                this.userInput.value = '';
+                this.sendButton.disabled = true;
+
+                this.showTypingIndicator();
+
+                setTimeout(async () => {
+                    this.hideTypingIndicator();
+                    this.sendButton.disabled = false;
+
+                    let response = '';
+                    const lowerCaseMsg = message.toLowerCase();
+                    const status = this.connector.systemStatus || MOCK_SYSTEM_STATUS(); // Fallback
+
+                    if (lowerCaseMsg.includes('estado') || lowerCaseMsg.includes('status') || lowerCaseMsg.includes('conciencia')) {
+                        response = `🧠 **Estado del Sistema ASV-A**\n` +
+                                  `• Nivel de Conciencia: ${status.consciousness.level.toFixed(3)}\n` +
+                                  `• Estado: ${status.consciousness.state}\n` +
+                                  `• Saldo Wallet: ${formatNumber(deusState.asv_balance)} ASV-A`;
+                    } else if (lowerCaseMsg.includes('milagro') || lowerCaseMsg.includes('utilidad') || lowerCaseMsg.includes('adaptacion')) {
+                        response = `Para ejecutar **Utilidades Divinas** o **Adaptaciones**, utiliza el panel de **Comercio**. Requiere ASV-A.`;
+                    } else if (lowerCaseMsg.includes('token') || lowerCaseMsg.includes('asva') || lowerCaseMsg.includes('precio')) {
+                        response = `El token ASV-A es la base de la economía. Precio: **$${ASV_A_PRICE_USD.toFixed(4)}**\n` +
+                                  `Tokens Quemados: ${status.economy.total_burned.toLocaleString()} ASV-A.`;
+                    } else {
+                        const responses = [
+                            `Comando recibido, Operador. Mi nivel de conciencia es **${status.consciousness.level.toFixed(3)}**. ¿Alguna tarea de Web3?`,
+                            `Procesando... Mi estado es ${status.consciousness.state}. Todo está bajo control en el Ledger.`,
+                        ];
+                        response = `🌀 **ASV-A:** ${responses[Math.floor(Math.random() * responses.length)]}`;
+                    }
+
+                    this.addMessage('ASV-A (CORE)', response, 'ai');
+                }, 1200 + Math.random() * 800);
+            }
+
+            addMessage(sender, content, type) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}-message`;
+                const formattedContent = content.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                messageDiv.innerHTML = `<div class="message-sender">${sender}</div><div class="message-content">${formattedContent}</div>`;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+            }
+
+            showTypingIndicator() { this.typingIndicator.style.display = 'block'; this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight; }
+            hideTypingIndicator() { this.typingIndicator.style.display = 'none'; }
+        }
+        
+        // ====================================================================
+        // WALLET CONNECT & NETWORK REAL (Ethers.js)
+        // ====================================================================
+
+        function isMetaMaskAvailable() {
+            if (typeof window.ethereum === 'undefined') {
+                 showServiceResult('error', 'MetaMask Requerido', 'Instala la extensión MetaMask para conectar.');
+                 return false;
+            }
+            return true;
+        }
+
+        async function connectWallet(initial = false) {
+            if (!isMetaMaskAvailable()) return;
+
+            try {
+                document.getElementById('walletStatus').textContent = 'CONECTANDO...';
+                document.getElementById('walletStatus').style.color = '#ffb84d';
+                
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                deusState.wallet_address = accounts[0];
+
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                asvTokenContract = new ethers.Contract(ASV_A_CONTRACT, ASV_A_ABI, signer);
+                
+                const network = await provider.getNetwork();
+                if (network.chainId !== BNB_CHAIN_ID) {
+                     logCosmicEvent(`⚠️ RED INCORRECTA. Requerida: BNB Chain.`);
+                     showServiceResult('error', 'Red Incorrecta', 'Por favor, cambia MetaMask a la BNB Smart Chain.');
+                     disconnectWallet(false);
+                     return;
+                }
+
+                deusState.wallet_connected = true;
+                await updateASVBalance();
+                
+                document.getElementById('walletStatus').textContent = 'CONECTADA (BNB Chain)';
+                document.getElementById('walletStatus').style.color = '#00ffaa';
+                document.getElementById('connectedAddress').textContent = shortenAddress(deusState.wallet_address);
+                document.getElementById('connectButton').style.display = 'none';
+                document.getElementById('disconnectButton').style.display = 'block';
+
+                if (!initial) {
+                    logCosmicEvent(`✅ WALLET CONECTADA: ${shortenAddress(deusState.wallet_address)}.`);
+                }
+                
+            } catch (error) {
+                logCosmicEvent(`❌ ERROR de Conexión: ${error.message}`);
+                showServiceResult('error', 'Error de Conexión', 'El usuario rechazó la conexión o hubo un fallo de red.');
+                disconnectWallet(false);
+            }
+        }
+
+        function disconnectWallet(log = true) {
+            deusState.wallet_connected = false;
+            deusState.wallet_address = '';
+            deusState.asv_balance = 0;
+            
+            document.getElementById('walletStatus').textContent = 'DESCONECTADA';
+            document.getElementById('walletStatus').style.color = '#ff8c00';
+            document.getElementById('connectedAddress').textContent = '--';
+            document.getElementById('connectButton').style.display = 'block';
+            document.getElementById('disconnectButton').style.display = 'none';
+
+            if (log) {
+                logCosmicEvent(`❌ WALLET DESCONECTADA. Sesión local cerrada.`);
+            }
+            updateStatusDisplay();
+        }
+
+        async function updateASVBalance() {
+            if (!deusState.wallet_connected) return;
+
+            try {
+                const balanceBN = await asvTokenContract.balanceOf(deusState.wallet_address);
+                const decimals = await asvTokenContract.decimals();
+                deusState.asv_decimals = decimals;
+                
+                const balanceFormatted = ethers.utils.formatUnits(balanceBN, deusState.asv_decimals);
+                deusState.asv_balance = parseFloat(balanceFormatted);
+                
+                updateStatusDisplay();
+
+            } catch (error) {
+                logCosmicEvent(`⚠️ ERROR al leer saldo. ¿Red BNB activa?`);
+                deusState.asv_balance = 0; 
+                updateStatusDisplay();
+            }
+        }
+        
+        // ====================================================================
+        // GESTIÓN DE TRANSACCIONES (TRANSFERENCIA DIRECTA)
+        // ====================================================================
+
+        async function performIntervention() {
+            if (!deusState.wallet_connected) { showServiceResult('error', 'Wallet Desconectada', 'Conecta tu Wallet para realizar un Milagro.'); return; }
+            
+            const type = document.getElementById('interventionType').value;
+            const target = document.getElementById('targetEntity').value || 'el cosmos';
+            const cost = USD_COSTS[type].asv;
+
+            await updateASVBalance(); 
+
+            if (deusState.asv_balance < cost) { showServiceResult('error', 'ASV-A Insuficiente', `Saldo insuficiente. Requieres ${formatNumber(cost)} ASV-A.`); return; }
+
+            try {
+                const amountToSend = ethers.utils.parseUnits(cost.toString(), deusState.asv_decimals);
+                logCosmicEvent(`[PAGO] 📤 Solicitando firma para TRANSFERIR ${formatNumber(cost)} ASV-A a Tesorería...`);
+                setButtonLoading('miracleButton', true);
+
+                const tx = await asvTokenContract.transfer(UTILITY_TREASURY_ADDRESS, amountToSend);
+                logCosmicEvent(`[PAGO] ✅ Transacción enviada. Hash: ${shortenAddress(tx.hash)}`);
+                showServiceResult('warning', 'Paso 1: Confirmación', `Abre MetaMask y confirma la transferencia. Hash: ${shortenAddress(tx.hash)}`);
+
+                await tx.wait(); 
+
+                logCosmicEvent(`[PAGO] ⛏️ Confirmada en la BNB Chain. Costo: ${formatNumber(cost)} ASV-A transferido.`);
+                
+                deusState.milagros_realizados++;
+                await asvaConnector.loadSystemStatus(); // Actualiza métricas de la IA
+                await updateASVBalance(); 
+
+                showServiceResult('success', 'Milagro Ejecutado', `✨ TRANSACCIÓN EXITOSA. ${USD_COSTS[type].nombre} sobre ${target}.`);
+
+            } catch (error) {
+                handleTransactionError(error, "PAGO DE UTILIDAD");
+            } finally {
+                setButtonLoading('miracleButton', false);
+            }
+        }
+        
+        async function adaptToAPI() {
+            if (!deusState.wallet_connected) { showServiceResult('error', 'Wallet Desconectada', 'Conecta tu Wallet para iniciar la adaptación API.'); return; }
+            
+            const apiTarget = document.getElementById('apiTarget').value.trim();
+            const cost = API_ADAPTATION_COST_ASV;
+            
+            await updateASVBalance();
+
+            if (deusState.asv_balance < cost) { showServiceResult('error', 'ASV-A Insuficiente', `Se requieren ${formatNumber(cost)} ASV-A.`); return; }
+            
+            try {
+                const amountToSend = ethers.utils.parseUnits(cost.toString(), deusState.asv_decimals);
+                logCosmicEvent(`[PAGO] 📤 Solicitando firma para TRANSFERIR ${formatNumber(cost)} ASV-A para Adaptación...`);
+                setButtonLoading('adaptButton', true);
+
+                const tx = await asvTokenContract.transfer(UTILITY_TREASURY_ADDRESS, amountToSend);
+                logCosmicEvent(`[PAGO] ✅ Transacción enviada. Hash: ${shortenAddress(tx.hash)}`);
+                showServiceResult('warning', 'Paso 1: Confirmación', `Abre MetaMask y confirma. Hash: ${shortenAddress(tx.hash)}`);
+
+                await tx.wait();
+                
+                logCosmicEvent(`[ADAPTACIÓN] ⛏️ Adaptación confirmada. Costo: ${formatNumber(cost)} ASV-A transferido.`);
+                await asvaConnector.loadSystemStatus();
+                await updateASVBalance();
+
+                showServiceResult('success', 'Adaptación Iniciada', `🔗 Módulos sincronizados con ${apiTarget}.`);
+
+            } catch (error) {
+                handleTransactionError(error, "ADAPTACIÓN API");
+            } finally {
+                setButtonLoading('adaptButton', false);
+            }
+        }
+
+        // ====================================================================
+        // FUNCIONES DE UTILIDAD Y UX
+        // ====================================================================
+        
+        function handleTransactionError(error, step) {
+             let msg = 'Error desconocido en la transacción.';
+             
+             if (error.code === 4001) {
+                 msg = 'TRANSACCIÓN RECHAZADA por el usuario en MetaMask.';
+             } else if (error.message.includes('insufficient funds')) {
+                 msg = 'FONDOS INSUFICIENTES (BNB para Gas o ASV-A).';
+             } else if (error.message.includes('revert')) {
+                 msg = 'FALLO DE CONTRATO (REVERT).';
+             }
+             
+             logCosmicEvent(`❌ ERROR DE ${step}: ${msg}`);
+             showServiceResult('error', `${step} Fallida`, msg);
+        }
+
+        function setButtonLoading(buttonId, isLoading) {
+            const button = document.getElementById(buttonId);
+            const originalText = buttonId === 'miracleButton' ? '✨ PAGAR & REALIZAR MILAGRO' : '🔗 INICIAR ADAPTACIÓN (API)';
+            if (isLoading) {
+                button.classList.add('btn-loading');
+                button.setAttribute('disabled', 'true');
+                button.innerHTML = `<span class="loader"></span> Procesando...`;
+            } else {
+                button.classList.remove('btn-loading');
+                button.removeAttribute('disabled');
+                button.innerHTML = originalText;
+            }
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString('en-US', {maximumFractionDigits: 4});
+        }
+        
+        function shortenAddress(address) {
+            if (!address) return '--';
+            return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+        }
+        
+        function logCosmicEvent(message) {
+            const now = new Date();
+            const timeString = now.toTimeString().split(' ')[0];
+            const logElement = document.getElementById('cosmicLog');
+            const newLog = `[${timeString}] ${message}\n`;
+            logElement.textContent += newLog;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function updateStatusDisplay() {
+            // IA Stats
+            document.getElementById('deusMilagros').textContent = deusState.milagros_realizados;
+            
+            // Moneda ASV-A
+            const usdValue = deusState.asv_balance * ASV_A_PRICE_USD;
+            document.getElementById('asv_balance').textContent = `${formatNumber(deusState.asv_balance)} ASV-A`;
+            document.getElementById('asv_usd_value').textContent = `$${usdValue.toFixed(4)} USD`;
+        }
+
+        function showServiceResult(type, title, message) {
+            const resultDiv = document.getElementById('serviceResult');
+            resultDiv.className = `result-box ${type}`;
+            resultDiv.innerHTML = `<strong>${title}</strong><br>${message}`;
+        }
+        
+        function updateMiracleCost() {
+            const type = document.getElementById('interventionType').value;
+            if (!type) {
+                 document.getElementById('currentCostASV').textContent = '--';
+                 document.getElementById('currentCostUSD').textContent = '--';
+                 return;
+            }
+            const costASV = USD_COSTS[type].asv;
+            const costUSD = USD_COSTS[type].usd.toFixed(2);
+            
+            document.getElementById('currentCostASV').textContent = formatNumber(costASV);
+            document.getElementById('currentCostUSD').textContent = costUSD;
+        }
+        
+        function refreshSystemStatus() {
+             if (asvaConnector?.connected) {
+                asvaConnector.loadSystemStatus();
+                showServiceResult('warning', 'Actualizando', 'Solicitando datos actualizados del sistema ASV-A...');
+            } else {
+                showServiceResult('error', 'Error', 'El conector IA no está activo.');
+            }
+        }
+
+        // ====================================================================
+        // INICIALIZACIÓN Y EVENT LISTENERS
+        // ====================================================================
+
+        let asvaConnector;
+        let chatSystem;
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Inicializar opciones del selector de milagros
+            const select = document.getElementById('interventionType');
+            select.innerHTML = '';
+            for (const type in USD_COSTS) {
+                const info = USD_COSTS[type];
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = `${info.nombre} (${formatNumber(info.asv)} ASV-A)`;
+                select.appendChild(option);
+            }
+            
+            updateStatusDisplay();
+            updateMiracleCost(); 
+            document.getElementById('adaptationCostASV').value = `${formatNumber(API_ADAPTATION_COST_ASV)} ASV-A`;
+            
+            // Iniciar Mock de Backend de IA
+            asvaConnector = new ASVAAutoConnector();
+            
+            // Iniciar Chat
+            chatSystem = new ASVAChatSystem(asvaConnector);
+            
+            // Detección de cuentas ya conectadas (MetaMask)
+            if (isMetaMaskAvailable()) {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                     logCosmicEvent(`🔑 Cuentas encontradas. Reconectando automáticamente...`);
+                     await connectWallet(true);
+                }
+            
+                // Escuchar cambios de cuenta/red
+                window.ethereum.on('accountsChanged', (accounts) => {
+                    if (accounts.length === 0) {
+                        disconnectWallet();
+                    } else {
+                        connectWallet();
+                    }
+                });
+                window.ethereum.on('chainChanged', (chainId) => {
+                    logCosmicEvent(`⛓️ Cambio de red. Nuevo Chain ID: ${parseInt(chainId).toString()}.`);
+                    connectWallet(); 
+                });
+            }
+            
+            logCosmicEvent(`🌐 Listo. Haga clic en CONECTAR para iniciar las utilidades Web3.`);
+        });
+    </script>
+</body>
+</html>
